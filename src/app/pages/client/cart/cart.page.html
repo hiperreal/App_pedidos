@@ -1,0 +1,60 @@
+<ion-header>
+  <div class="cart-header">
+    <button class="back-btn" (click)="goBack()">←</button>
+    <h3>Tu pedido</h3>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="cart-empty" *ngIf="!items.length">
+    <div class="ico">🛒</div>
+    <p>Tu carrito está vacío</p>
+    <button class="go-menu-btn" (click)="goBack()">Ver menú</button>
+  </div>
+
+  <ng-container *ngIf="items.length">
+    <div class="cart-item" *ngFor="let item of items">
+      <div class="cart-item-icon">{{ item.emoji }}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">{{ item.name }} — {{ item.variant }}</div>
+        <div class="cart-item-extras">
+          <span *ngIf="!item.extras.length">Sin extras</span>
+          <span *ngIf="item.extras.length">{{ item.extras[0].name }}</span>
+          <span *ngIf="item.notes"> · "{{ item.notes }}"</span>
+        </div>
+      </div>
+      <div class="cart-item-price">${{ fmt(item.price) }}</div>
+      <button class="cart-remove" (click)="remove(item.uid)">×</button>
+    </div>
+
+    <div class="cart-total-row">
+      <div class="total-line"><span>Subtotal</span><span>${{ fmt(subtotal) }}</span></div>
+      <div class="total-line"><span>Envío</span><span>${{ fmt(deliveryFee) }}</span></div>
+      <div class="total-line big"><span>Total</span><span>${{ fmt(total) }}</span></div>
+    </div>
+
+    <div class="pay-section">
+      <div class="pay-title">Método de pago</div>
+      <div class="pay-opts">
+        <div class="pay-opt" [class.sel]="payMethod==='card'" (click)="selectPay('card')">
+          <div class="pay-ico">💳</div>
+          <div class="pay-lbl">Tarjeta</div>
+        </div>
+        <div class="pay-opt" [class.sel]="payMethod==='cash'" (click)="selectPay('cash')">
+          <div class="pay-ico">💵</div>
+          <div class="pay-lbl">Efectivo</div>
+        </div>
+      </div>
+      <div class="cash-field" *ngIf="payMethod==='cash'">
+        <label>¿Con cuánto pagas?</label>
+        <input type="number" placeholder="Ej: 20.00" [(ngModel)]="cashAmount" />
+      </div>
+    </div>
+  </ng-container>
+</ion-content>
+
+<ion-footer *ngIf="items.length">
+  <button class="confirm-btn" (click)="placeOrder()">
+    Confirmar pedido — ${{ fmt(total) }}
+  </button>
+</ion-footer>

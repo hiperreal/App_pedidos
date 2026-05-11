@@ -1,0 +1,137 @@
+.detail-top {
+  background: var(--app-orange);
+  padding: 10px 14px 14px;
+
+  .back-btn {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,.85);
+    font-size: 12px;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  h3 {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+  }
+}
+
+.detail-hero {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;
+}
+
+.opt-card {
+  background: #fff;
+  border-radius: 12px;
+  margin: 10px 12px 0;
+  padding: 12px 14px;
+
+  .opt-card-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 10px;
+  }
+
+  .opt-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    &:last-child { margin-bottom: 0; }
+
+    .opt-left {
+      .opt-name  { font-size: 12px; color: #333; }
+      .opt-price { font-size: 11px; color: var(--app-orange); margin-top: 2px; }
+    }
+
+    .counter {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .ctr-btn {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: var(--app-orange);
+        color: #fff;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+      }
+
+      .ctr-val {
+        font-size: 13px;
+        font-weight: 600;
+        color: #111;
+        min-width: 16px;
+        text-align: center;
+      }
+    }
+  }
+}
+
+.variants-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  .var-btn {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 11px;
+    color: #555;
+    background: #fff;
+    cursor: pointer;
+
+    &.sel {
+      border-color: var(--app-orange);
+      color: var(--app-orange);
+      background: #FFF5EE;
+    }
+  }
+}
+
+.notes-input {
+  width: 100%;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  color: #333;
+  resize: none;
+  background: #F7F7F5;
+  font-family: inherit;
+}
+
+ion-footer {
+  padding: 10px 14px;
+  background: #fff;
+  border-top: 1px solid #f0f0f0;
+
+  .add-cart-btn {
+    width: 100%;
+    background: var(--app-orange);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+}

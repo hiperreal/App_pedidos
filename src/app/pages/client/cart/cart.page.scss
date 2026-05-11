@@ -1,0 +1,122 @@
+$primary: #ffc107;
+$dark-bg: #121212;
+$card-bg: #1e1e1e;
+$text-gray: #a0a0a0;
+
+.cart-header {
+  background: $dark-bg;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  color: white;
+  
+  ion-back-button { --color: white; }
+  h3 { margin: 0 0 0 10px; font-weight: 700; font-size: 22px; }
+}
+
+ion-content {
+  --background: #{$dark-bg};
+
+  .cart-list {
+    padding: 16px;
+    
+    .cart-item {
+      background: $card-bg;
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      gap: 15px;
+      margin-bottom: 12px;
+
+      .item-emoji {
+        font-size: 30px;
+        background: #2a2a2a;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+      }
+
+      .item-details {
+        flex: 1;
+        .name-row {
+          display: flex;
+          justify-content: space-between;
+          .item-name { color: white; font-weight: 600; font-size: 15px; }
+          .remove-icon { color: #eb445a; font-size: 20px; }
+        }
+        .extras { color: $text-gray; font-size: 12px; margin: 4px 0; }
+        .item-price { color: $primary; font-weight: 700; }
+      }
+    }
+  }
+
+  .summary-section {
+    padding: 20px 16px;
+    border-top: 1px solid #2a2a2a;
+    
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      color: $text-gray;
+      margin-bottom: 8px;
+      font-size: 15px;
+      
+      &.total {
+        color: white;
+        font-weight: 800;
+        font-size: 18px;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px dashed #444;
+      }
+    }
+  }
+
+  .payment-section {
+    padding: 0 16px 40px;
+    h4 { color: white; font-size: 16px; margin-bottom: 15px; }
+    
+    .payment-options {
+      display: flex;
+      gap: 12px;
+      
+      .pay-card {
+        flex: 1;
+        background: $card-bg;
+        padding: 15px;
+        border-radius: 12px;
+        text-align: center;
+        color: white;
+        border: 2px solid transparent;
+        transition: 0.2s;
+        
+        .emoji { display: block; font-size: 24px; margin-bottom: 5px; }
+        
+        &.active {
+          border-color: $primary;
+          background: rgba($primary, 0.1);
+        }
+      }
+    }
+  }
+}
+
+ion-footer {
+  background: $dark-bg;
+  .footer-padding {
+    padding: 16px;
+    .checkout-btn {
+      width: 100%;
+      background: $primary;
+      color: black;
+      padding: 18px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 800;
+      border: none;
+    }
+  }
+}
