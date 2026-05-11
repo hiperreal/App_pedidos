@@ -19,7 +19,7 @@
       *ngFor="let cat of categories"
       class="cat-btn"
       [class.active]="activeCat === cat"
-      (click)="activeCat = cat">
+      (click)="filterCat(cat)">
       {{ cat }}
     </button>
   </div>
@@ -40,15 +40,17 @@
         <div class="item-name">{{ item.name }}</div>
         <div class="price-row">
           <span class="item-price">${{ item.basePrice.toFixed(2) }}</span>
-          <button class="item-add">+</button>
+          <button class="item-add" (click)="openDetail(item)">+</button>
         </div>
       </div>
     </div>
   </div>
 
   <div class="admin-access">
-    <button (click)="goToKds()" class="kds-btn">
-      🍽 Abrir Panel de Restaurante
-    </button>
-  </div>
-</ion-content>
+  <button (click)="goToOrders()" class="kds-btn orders-btn">
+    📦 Mis pedidos
+  </button>
+  <button (click)="goToKds()" class="kds-btn">
+    🍽 Abrir Panel de Restaurante
+  </button>
+</div>

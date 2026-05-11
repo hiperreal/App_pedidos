@@ -54,4 +54,8 @@ export class HomePage implements OnInit, OnDestroy {
   goToKds(): void {
     this.router.navigate(['/restaurant/kds']);
   }
+
+  goToOrders(): void {
+    this.router.navigate(['/client/orders']);
+  }
 }

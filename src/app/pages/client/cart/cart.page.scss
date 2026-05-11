@@ -1,122 +1,82 @@
-$primary: #ffc107;
-$dark-bg: #121212;
-$card-bg: #1e1e1e;
-$text-gray: #a0a0a0;
-
 .cart-header {
-  background: $dark-bg;
-  padding: 10px 16px;
+  background: #1e1e1e;
+  padding: 14px 16px;
   display: flex;
   align-items: center;
-  color: white;
-  
-  ion-back-button { --color: white; }
-  h3 { margin: 0 0 0 10px; font-weight: 700; font-size: 22px; }
+  gap: 12px;
+  .back-btn { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; }
+  h3 { color: #fff; font-size: 16px; font-weight: 600; margin: 0; }
 }
 
-ion-content {
-  --background: #{$dark-bg};
+ion-content { --background: #121212; }
 
-  .cart-list {
-    padding: 16px;
-    
-    .cart-item {
-      background: $card-bg;
-      border-radius: 16px;
-      padding: 16px;
-      display: flex;
-      gap: 15px;
-      margin-bottom: 12px;
+.cart-empty {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 60px 20px; gap: 10px;
+  .ico { font-size: 48px; }
+  p { color: #888; font-size: 14px; }
+  .go-menu-btn {
+    background: #ffc107; color: #000; border: none;
+    border-radius: 10px; padding: 12px 28px; font-size: 13px;
+    font-weight: 600; cursor: pointer; margin-top: 10px;
+  }
+}
 
-      .item-emoji {
-        font-size: 30px;
-        background: #2a2a2a;
-        width: 60px;
-        height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 12px;
-      }
+.cart-item {
+  background: #1e1e1e; margin: 10px 14px 0; border-radius: 12px;
+  padding: 12px; display: flex; align-items: center; gap: 10px;
+  .cart-item-icon { font-size: 28px; width: 36px; text-align: center; }
+  .cart-item-info {
+    flex: 1;
+    .cart-item-name { font-size: 13px; font-weight: 600; color: #fff; }
+    .cart-item-extras { font-size: 11px; color: #888; margin-top: 2px; }
+  }
+  .cart-item-price { font-size: 13px; font-weight: 600; color: #ffc107; }
+  .cart-remove {
+    background: #2a2a2a; border: none; border-radius: 6px;
+    width: 26px; height: 26px; color: #e44; font-size: 16px; cursor: pointer;
+  }
+}
 
-      .item-details {
-        flex: 1;
-        .name-row {
-          display: flex;
-          justify-content: space-between;
-          .item-name { color: white; font-weight: 600; font-size: 15px; }
-          .remove-icon { color: #eb445a; font-size: 20px; }
-        }
-        .extras { color: $text-gray; font-size: 12px; margin: 4px 0; }
-        .item-price { color: $primary; font-weight: 700; }
-      }
+.cart-total-row {
+  background: #1e1e1e; margin: 10px 14px 0; border-radius: 12px; padding: 14px;
+  .total-line {
+    display: flex; justify-content: space-between;
+    font-size: 13px; color: #888; margin-bottom: 6px;
+    &.big {
+      font-size: 15px; font-weight: 700; color: #fff;
+      border-top: 1px solid #333; padding-top: 8px; margin-top: 4px; margin-bottom: 0;
     }
   }
+}
 
-  .summary-section {
-    padding: 20px 16px;
-    border-top: 1px solid #2a2a2a;
-    
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      color: $text-gray;
-      margin-bottom: 8px;
-      font-size: 15px;
-      
-      &.total {
-        color: white;
-        font-weight: 800;
-        font-size: 18px;
-        margin-top: 12px;
-        padding-top: 12px;
-        border-top: 1px dashed #444;
-      }
+.pay-section {
+  background: #1e1e1e; margin: 10px 14px 20px; border-radius: 12px; padding: 14px;
+  .pay-title { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 10px; }
+  .pay-opts {
+    display: flex; gap: 10px;
+    .pay-opt {
+      flex: 1; border: 1px solid #333; border-radius: 10px;
+      padding: 10px; text-align: center; cursor: pointer; background: #2a2a2a;
+      .pay-ico { font-size: 22px; margin-bottom: 4px; }
+      .pay-lbl { font-size: 11px; font-weight: 500; color: #888; }
+      &.sel { border-color: #ffc107; background: #2a2500; .pay-lbl { color: #ffc107; } }
     }
   }
-
-  .payment-section {
-    padding: 0 16px 40px;
-    h4 { color: white; font-size: 16px; margin-bottom: 15px; }
-    
-    .payment-options {
-      display: flex;
-      gap: 12px;
-      
-      .pay-card {
-        flex: 1;
-        background: $card-bg;
-        padding: 15px;
-        border-radius: 12px;
-        text-align: center;
-        color: white;
-        border: 2px solid transparent;
-        transition: 0.2s;
-        
-        .emoji { display: block; font-size: 24px; margin-bottom: 5px; }
-        
-        &.active {
-          border-color: $primary;
-          background: rgba($primary, 0.1);
-        }
-      }
+  .cash-field {
+    margin-top: 10px;
+    label { font-size: 11px; color: #666; display: block; margin-bottom: 6px; }
+    input {
+      width: 100%; border: 1px solid #333; border-radius: 8px;
+      padding: 8px 10px; font-size: 12px; background: #2a2a2a; color: #fff;
     }
   }
 }
 
 ion-footer {
-  background: $dark-bg;
-  .footer-padding {
-    padding: 16px;
-    .checkout-btn {
-      width: 100%;
-      background: $primary;
-      color: black;
-      padding: 18px;
-      border-radius: 14px;
-      font-size: 16px;
-      font-weight: 800;
-      border: none;
-    }
+  padding: 10px 14px; background: #1e1e1e; border-top: 1px solid #333;
+  .confirm-btn {
+    width: 100%; background: #ffc107; color: #000; border: none;
+    border-radius: 12px; padding: 14px; font-size: 14px; font-weight: 700; cursor: pointer;
   }
 }

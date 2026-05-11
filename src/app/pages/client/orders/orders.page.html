@@ -1,13 +1,69 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>orders</ion-title>
-  </ion-toolbar>
+<ion-header>
+  <div class="orders-header">
+    <button class="back-btn" (click)="goHome()">←</button>
+    <h3>Mis pedidos</h3>
+  </div>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">orders</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+
+  <!-- Sin pedidos -->
+  <div class="empty-state" *ngIf="!allOrders.length">
+    <div class="empty-ico">🍽</div>
+    <p class="empty-title">Aún no tienes pedidos</p>
+    <p class="empty-sub">Agrega algo delicioso al carrito</p>
+    <button class="go-btn" (click)="goHome()">Ver menú</button>
+  </div>
+
+  <!-- Lista de pedidos -->
+  <div class="orders-list" *ngIf="allOrders.length">
+    <div class="order-card" *ngFor="let order of allOrders">
+
+      <!-- Header de la tarjeta -->
+      <div class="order-card-header">
+        <div class="order-num">{{ order.num }}</div>
+        <div class="order-status" [style.color]="getStatusColor(order)">
+          {{ getStatusEmoji(order) }} {{ getStatus(order) }}
+        </div>
+      </div>
+
+      <!-- Items del pedido -->
+      <div class="order-items">
+        <div class="order-item" *ngFor="let item of order.items">
+          • {{ item }}
+        </div>
+      </div>
+
+      <!-- Notas -->
+      <div class="order-notes" *ngIf="order.notes">
+        📝 {{ order.notes }}
+      </div>
+
+      <!-- Footer -->
+      <div class="order-card-footer">
+        <div class="order-pay">💳 {{ order.payMethod }}</div>
+        <div class="order-total">${{ order.total.toFixed(2) }}</div>
+      </div>
+
+      <!-- Barra de progreso -->
+      <div class="progress-bar">
+        <div class="progress-step" [class.active]="true">
+          <div class="step-dot"></div>
+          <div class="step-label">Recibido</div>
+        </div>
+        <div class="progress-line" [class.active]="getStatus(order) !== 'Pendiente'"></div>
+        <div class="progress-step" [class.active]="getStatus(order) !== 'Pendiente'">
+          <div class="step-dot"></div>
+          <div class="step-label">Preparando</div>
+        </div>
+        <div class="progress-line" [class.active]="getStatus(order) === 'Entregado'"></div>
+        <div class="progress-step" [class.active]="getStatus(order) === 'Entregado'">
+          <div class="step-dot"></div>
+          <div class="step-label">Entregado</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </ion-content>
