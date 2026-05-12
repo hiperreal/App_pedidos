@@ -1,7 +1,7 @@
 <ion-header>
   <div class="panel-head">
     <div class="live-dot"></div>
-    <h3>Panel del local</h3>
+    <h3>Panel del Restaurante</h3>
   </div>
 </ion-header>
 
@@ -12,11 +12,13 @@
       <!-- PENDIENTES -->
       <div class="kds-col">
         <div class="col-head">
-          <span class="col-title pending">Pendientes</span>
+          <span class="col-title pending">⏳ Pendientes</span>
           <span class="col-badge badge-p">{{ orders.pending.length }}</span>
         </div>
         <div class="col-body">
-          <div class="pcol-empty" *ngIf="!orders.pending.length">Sin pedidos</div>
+          <div class="pcol-empty" *ngIf="!orders.pending.length">
+            Sin pedidos pendientes
+          </div>
           <div class="pcard pending" *ngFor="let o of orders.pending">
             <div class="pcard-top">
               <span class="pcard-num">{{ o.num }}</span>
@@ -25,15 +27,16 @@
             <div class="pcard-items">
               <div *ngFor="let item of o.items">• {{ item }}</div>
             </div>
-            <div class="pcard-note" *ngIf="o.notes">{{ o.notes }}</div>
-            <div class="pcard-pay">Pago: {{ o.payMethod }} · ${{ o.total | number:'1.2-2' }}</div>
+            <div class="pcard-note" *ngIf="o.notes">📝 {{ o.notes }}</div>
+            <div class="pcard-address" *ngIf="o.address">
+              📍 {{ o.address }}
+            </div>
+            <div class="pcard-pay">💳 {{ o.payMethod }} &nbsp;·&nbsp; ${{ o.total.toFixed(2) }}</div>
             <div class="pcard-btns">
               <button class="advance-btn" (click)="advance(o.id, 'pending')">
-                → A cocina
+                → Enviar a cocina
               </button>
-              <button class="remove-btn" (click)="remove(o.id, 'pending')">
-                Eliminar
-              </button>
+              <button class="remove-btn" (click)="remove(o.id, 'pending')">✕</button>
             </div>
           </div>
         </div>
@@ -42,11 +45,13 @@
       <!-- EN COCINA -->
       <div class="kds-col">
         <div class="col-head">
-          <span class="col-title cooking">En cocina</span>
+          <span class="col-title cooking">👨‍🍳 En cocina</span>
           <span class="col-badge badge-c">{{ orders.cooking.length }}</span>
         </div>
         <div class="col-body">
-          <div class="pcol-empty" *ngIf="!orders.cooking.length">Sin pedidos</div>
+          <div class="pcol-empty" *ngIf="!orders.cooking.length">
+            Sin pedidos en cocina
+          </div>
           <div class="pcard cooking" *ngFor="let o of orders.cooking">
             <div class="pcard-top">
               <span class="pcard-num">{{ o.num }}</span>
@@ -55,15 +60,16 @@
             <div class="pcard-items">
               <div *ngFor="let item of o.items">• {{ item }}</div>
             </div>
-            <div class="pcard-note" *ngIf="o.notes">{{ o.notes }}</div>
-            <div class="pcard-pay">Pago: {{ o.payMethod }} · ${{ o.total | number:'1.2-2' }}</div>
+            <div class="pcard-note" *ngIf="o.notes">📝 {{ o.notes }}</div>
+            <div class="pcard-address" *ngIf="o.address">
+              📍 {{ o.address }}
+            </div>
+            <div class="pcard-pay">💳 {{ o.payMethod }} &nbsp;·&nbsp; ${{ o.total.toFixed(2) }}</div>
             <div class="pcard-btns">
               <button class="advance-btn" (click)="advance(o.id, 'cooking')">
-                → Enviado
+                → Marcar enviado
               </button>
-              <button class="remove-btn" (click)="remove(o.id, 'cooking')">
-                Eliminar
-              </button>
+              <button class="remove-btn" (click)="remove(o.id, 'cooking')">✕</button>
             </div>
           </div>
         </div>
@@ -72,11 +78,13 @@
       <!-- ENVIADOS -->
       <div class="kds-col">
         <div class="col-head">
-          <span class="col-title sent">Enviados</span>
+          <span class="col-title sent">✅ Enviados</span>
           <span class="col-badge badge-s">{{ orders.sent.length }}</span>
         </div>
         <div class="col-body">
-          <div class="pcol-empty" *ngIf="!orders.sent.length">Sin pedidos</div>
+          <div class="pcol-empty" *ngIf="!orders.sent.length">
+            Sin pedidos enviados
+          </div>
           <div class="pcard sent" *ngFor="let o of orders.sent">
             <div class="pcard-top">
               <span class="pcard-num">{{ o.num }}</span>
@@ -85,12 +93,16 @@
             <div class="pcard-items">
               <div *ngFor="let item of o.items">• {{ item }}</div>
             </div>
-            <div class="pcard-note" *ngIf="o.notes">{{ o.notes }}</div>
-            <div class="pcard-pay">Pago: {{ o.payMethod }} · ${{ o.total | number:'1.2-2' }}</div>
+            <div class="pcard-note" *ngIf="o.notes">📝 {{ o.notes }}</div>
+            <div class="pcard-address" *ngIf="o.address">
+              📍 {{ o.address }}
+            </div>
+            <div class="pcard-pay">💳 {{ o.payMethod }} &nbsp;·&nbsp; ${{ o.total.toFixed(2) }}</div>
             <div class="pcard-btns">
-              <button class="remove-btn" (click)="remove(o.id, 'sent')">
-                Eliminar
+              <button class="maps-btn" (click)="openMaps(o)">
+                <div class="maps-dot"></div> Ver en Maps
               </button>
+              <button class="remove-btn" (click)="remove(o.id, 'sent')">✕</button>
             </div>
           </div>
         </div>

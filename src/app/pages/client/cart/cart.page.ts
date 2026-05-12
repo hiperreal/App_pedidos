@@ -18,6 +18,11 @@ export class CartPage implements OnInit, OnDestroy {
   items: CartItem[] = [];
   payMethod: string = 'card';
   cashAmount: string = '';
+  address: string = '';
+  locating: boolean = false;
+  locError: string = '';
+  userLat: number = 0;
+  userLng: number = 0;
   private sub!: Subscription;
 
   constructor(
@@ -49,11 +54,50 @@ export class CartPage implements OnInit, OnDestroy {
     if (method === 'card') this.cashAmount = '';
   }
 
+  detectLocation(): void {
+    if (!navigator.geolocation) {
+      this.locError = 'Tu dispositivo no soporta geolocalización';
+      return;
+    }
+    this.locating = true;
+    this.locError = '';
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        this.userLat = pos.coords.latitude;
+        this.userLng = pos.coords.longitude;
+        try {
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${this.userLat}&lon=${this.userLng}&format=json`
+          );
+          const data = await res.json();
+          this.address = data.display_name ?? `${this.userLat}, ${this.userLng}`;
+        } catch {
+          this.address = `${this.userLat.toFixed(5)}, ${this.userLng.toFixed(5)}`;
+        }
+        this.locating = false;
+      },
+      () => {
+        this.locError = 'No se pudo obtener la ubicación. Escríbela manualmente.';
+        this.locating = false;
+      },
+      { timeout: 10000 }
+    );
+  }
+
   async placeOrder(): Promise<void> {
     if (!this.items.length) return;
+    if (!this.address.trim()) {
+      this.locError = 'Por favor ingresa o detecta tu dirección.';
+      return;
+    }
     const payLabel = this.payMethod === 'cash'
       ? `Efectivo ($${this.cashAmount})` : 'Tarjeta';
-    const num = this.cartService.placeOrder(payLabel);
+    const num = this.cartService.placeOrder(
+      payLabel,
+      this.address,
+      this.userLat,
+      this.userLng
+    );
     const toast = await this.toastCtrl.create({
       message: `✅ Pedido ${num} enviado al restaurante`,
       duration: 2500, color: 'dark', position: 'top',

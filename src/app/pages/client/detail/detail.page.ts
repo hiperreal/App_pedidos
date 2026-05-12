@@ -57,6 +57,7 @@ export class DetailPage implements OnInit {
       itemId: this.item.id,
       name: this.item.name,
       emoji: this.item.emoji,
+      imageUrl: this.item.imageUrl,
       variant: this.selectedVariant,
       extras: extrasAdded,
       notes: this.notes,

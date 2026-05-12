@@ -23,4 +23,8 @@ export class KdsPage {
   remove(id: number, col: 'pending' | 'cooking' | 'sent'): void {
     this.cartService.removeOrder(id, col);
   }
+
+  openMaps(order: Order): void {
+    window.open('https://www.google.com/maps', '_blank');
+  }
 }

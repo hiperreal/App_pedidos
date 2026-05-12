@@ -1,22 +1,24 @@
 .panel-head {
-  background: var(--app-dark);
-  padding: 14px 16px;
+  background: #1a1a1a;
+  padding: 16px 20px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 
   .live-dot {
-    width: 10px;
-    height: 10px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
     background: #4CAF50;
     animation: pulse 1.5s infinite;
+    flex-shrink: 0;
   }
 
   h3 {
     color: #fff;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
   }
 }
 
@@ -25,129 +27,186 @@
   50%       { opacity: .4; }
 }
 
+ion-content {
+  --background: #121212;
+}
+
 .kds-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 0;
-  min-height: calc(100vh - 52px);
+  height: 100%;
 }
 
 .kds-col {
-  border-right: 1px solid var(--app-border);
+  border-right: 2px solid #2a2a2a;
   display: flex;
   flex-direction: column;
   &:last-child { border-right: none; }
 
   .col-head {
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--app-border);
+    padding: 16px 18px;
+    border-bottom: 2px solid #2a2a2a;
     display: flex;
     align-items: center;
-    gap: 8px;
-    background: #fff;
+    gap: 12px;
+    background: #1e1e1e;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 
     .col-title {
-      font-size: 12px;
-      font-weight: 600;
-      &.pending { color: #BF360C; }
-      &.cooking  { color: #E65100; }
-      &.sent     { color: #1B5E20; }
+      font-size: 18px;
+      font-weight: 700;
+      &.pending { color: #FF6B00; }
+      &.cooking  { color: #FFC107; }
+      &.sent     { color: #4CAF50; }
     }
 
     .col-badge {
-      font-size: 10px;
-      padding: 2px 8px;
+      font-size: 14px;
+      padding: 4px 14px;
       border-radius: 20px;
-      font-weight: 600;
-      &.badge-p { background: #FFF3E0; color: #BF360C; }
-      &.badge-c { background: #FFF8E1; color: #E65100; }
-      &.badge-s { background: #E8F5E9; color: #1B5E20; }
+      font-weight: 700;
+      &.badge-p { background: #3a1500; color: #FF6B00; }
+      &.badge-c { background: #3a2e00; color: #FFC107; }
+      &.badge-s { background: #0a2e0a; color: #4CAF50; }
     }
   }
 
   .col-body {
     flex: 1;
-    padding: 8px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    background: #F7F7F5;
+    gap: 12px;
+    background: #121212;
+    overflow-y: auto;
 
     .pcol-empty {
       text-align: center;
-      padding: 24px 0;
-      font-size: 11px;
-      color: #bbb;
+      padding: 40px 0;
+      font-size: 16px;
+      color: #444;
     }
   }
 }
 
 .pcard {
-  background: #fff;
-  border-radius: 8px;
-  padding: 10px;
-  border-left: 3px solid;
+  background: #1e1e1e;
+  border-radius: 12px;
+  padding: 16px;
+  border-left: 5px solid;
 
-  &.pending { border-left-color: var(--app-orange); }
+  &.pending { border-left-color: #FF6B00; }
   &.cooking  { border-left-color: #FFC107; }
   &.sent     { border-left-color: #4CAF50; }
 
   .pcard-top {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 6px;
+    align-items: center;
+    margin-bottom: 12px;
 
-    .pcard-num  { font-size: 12px; font-weight: 700; color: #111; }
-    .pcard-time { font-size: 10px; color: #999; }
+    .pcard-num  {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .pcard-time {
+      font-size: 14px;
+      color: #888;
+    }
   }
 
   .pcard-items {
-    font-size: 10px;
-    color: #444;
-    line-height: 1.6;
-    margin-bottom: 4px;
-  }
+  font-size: 16px;
+  color: #fff;
+  line-height: 2.2;
+  margin-bottom: 10px;
+  border-top: 1px solid #2a2a2a;
+  padding-top: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
 
   .pcard-note {
-    font-size: 10px;
-    color: #CC4400;
+    font-size: 14px;
+    color: #FF6B00;
     font-style: italic;
-    background: #FFF5EE;
-    border-radius: 4px;
-    padding: 3px 6px;
-    margin-bottom: 4px;
+    background: #2a1500;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    line-height: 1.5;
   }
 
   .pcard-pay {
-    font-size: 10px;
+    font-size: 14px;
     color: #888;
-    margin-bottom: 8px;
+    margin-bottom: 14px;
   }
 
   .pcard-btns {
     display: flex;
-    gap: 6px;
+    gap: 10px;
 
     .advance-btn {
       flex: 1;
-      background: var(--app-orange);
+      background: #ffc107;
       border: none;
-      border-radius: 6px;
-      padding: 5px 8px;
-      font-size: 10px;
-      color: #fff;
+      border-radius: 10px;
+      padding: 12px 10px;
+      font-size: 15px;
+      color: #000;
       cursor: pointer;
+      font-weight: 700;
+    }
+
+    .maps-btn {
+      flex: 1;
+      background: #1a2e1a;
+      border: 1px solid #4CAF50;
+      border-radius: 10px;
+      padding: 12px 10px;
+      font-size: 14px;
+      color: #4CAF50;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
       font-weight: 600;
+
+      .maps-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #4CAF50;
+        animation: pulse 1.5s infinite;
+      }
     }
 
     .remove-btn {
-      background: #fee;
-      border: none;
-      border-radius: 6px;
-      padding: 5px 8px;
-      font-size: 10px;
-      color: #c44;
+      background: #2a0a0a;
+      border: 1px solid #c44;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 14px;
+      color: #e44;
       cursor: pointer;
+      font-weight: 600;
     }
   }
+}
+
+.pcard-address {
+  font-size: 13px;
+  color: #4fc3f7;
+  background: #0a1e2e;
+  border: 1px solid #1565c0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  line-height: 1.5;
 }
