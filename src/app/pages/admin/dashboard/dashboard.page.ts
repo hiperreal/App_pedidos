@@ -18,7 +18,6 @@ export class DashboardPage implements OnInit, OnDestroy {
   sentOrders: number = 0;
   allOrders: Order[] = [];
   private sub!: Subscription;
-
   topProducts: { name: string; count: number; emoji: string }[] = [];
 
   constructor(

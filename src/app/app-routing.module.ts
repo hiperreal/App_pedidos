@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth-guard';
-import { RoleGuard } from './core/guards/role-guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -15,8 +14,7 @@ const routes: Routes = [
       .then(m => m.RegisterPageModule) },
 
   { path: 'client/home',
-    canActivate: [AuthGuard, RoleGuard],
-    data: { role: 'client' },
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/client/home/home.module')
       .then(m => m.HomePageModule) },
 
@@ -35,33 +33,28 @@ const routes: Routes = [
     loadChildren: () => import('./pages/client/orders/orders.module')
       .then(m => m.OrdersPageModule) },
 
-  { path: 'restaurant/kds',
-    canActivate: [AuthGuard, RoleGuard],
-    data: { role: 'restaurant' },
-    loadChildren: () => import('./pages/restaurant/kds/kds.module')
-      .then(m => m.KdsPageModule) },
-
   { path: 'restaurant/dashboard',
-    canActivate: [AuthGuard, RoleGuard],
-    data: { role: 'restaurant' },
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/restaurant/dashboard/dashboard.module')
       .then(m => m.DashboardPageModule) },
 
+  { path: 'restaurant/kds',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/restaurant/kds/kds.module')
+      .then(m => m.KdsPageModule) },
+
   { path: 'restaurant/menu-manager',
-    canActivate: [AuthGuard, RoleGuard],
-    data: { role: 'restaurant' },
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/restaurant/menu-manager/menu-manager.module')
       .then(m => m.MenuManagerPageModule) },
 
   { path: 'delivery/my-deliveries',
-    canActivate: [AuthGuard, RoleGuard],
-    data: { role: 'delivery' },
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/delivery/my-deliveries/my-deliveries.module')
       .then(m => m.MyDeliveriesPageModule) },
 
   { path: 'admin/dashboard',
-    canActivate: [AuthGuard, RoleGuard],
-    data: { role: 'admin' },
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/admin/dashboard/dashboard.module')
       .then(m => m.DashboardPageModule) },
 

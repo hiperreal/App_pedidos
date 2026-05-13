@@ -107,7 +107,6 @@ ion-content { --background: #121212; }
     color: #4fc3f7;
     margin-bottom: 8px;
     line-height: 1.5;
-
     strong { color: #90caf9; }
   }
 
@@ -138,11 +137,7 @@ ion-content { --background: #121212; }
         transition: background 0.3s;
       }
 
-      span {
-        font-size: 8px;
-        color: #555;
-        white-space: nowrap;
-      }
+      span { font-size: 8px; color: #555; white-space: nowrap; }
 
       &.done .track-dot { background: #ffc107; }
       &.done span       { color: #ffc107; }
@@ -172,8 +167,9 @@ ion-content { --background: #121212; }
       width: 100%;
       height: 280px;
       border-radius: 12px;
-      overflow: hidden;
+      overflow: visible !important;
       border: 1px solid #333;
+      position: relative;
       z-index: 1;
     }
   }
@@ -202,4 +198,41 @@ ion-content { --background: #121212; }
     font-size: 12px;
     font-weight: 600;
   }
+}
+
+.leaflet-container {
+  background: #1a1a2e !important;
+  z-index: 1 !important;
+  border-radius: 12px;
+}
+
+.leaflet-tile-pane {
+  opacity: 1 !important;
+  z-index: 2 !important;
+}
+
+.leaflet-tile {
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+.leaflet-map-pane {
+  z-index: 2 !important;
+}
+
+.leaflet-overlay-pane {
+  z-index: 3 !important;
+}
+
+.leaflet-marker-pane {
+  z-index: 4 !important;
+}
+
+.leaflet-popup-pane {
+  z-index: 5 !important;
+}
+
+.map-box {
+  position: relative;
+  z-index: 1;
 }

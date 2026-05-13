@@ -28,9 +28,7 @@
               <div *ngFor="let item of o.items">• {{ item }}</div>
             </div>
             <div class="pcard-note" *ngIf="o.notes">📝 {{ o.notes }}</div>
-            <div class="pcard-address" *ngIf="o.address">
-              📍 {{ o.address }}
-            </div>
+            <div class="pcard-address" *ngIf="o.address">📍 {{ o.address }}</div>
             <div class="pcard-pay">💳 {{ o.payMethod }} &nbsp;·&nbsp; ${{ o.total.toFixed(2) }}</div>
             <div class="pcard-btns">
               <button class="advance-btn" (click)="advance(o.id, 'pending')">
@@ -61,9 +59,7 @@
               <div *ngFor="let item of o.items">• {{ item }}</div>
             </div>
             <div class="pcard-note" *ngIf="o.notes">📝 {{ o.notes }}</div>
-            <div class="pcard-address" *ngIf="o.address">
-              📍 {{ o.address }}
-            </div>
+            <div class="pcard-address" *ngIf="o.address">📍 {{ o.address }}</div>
             <div class="pcard-pay">💳 {{ o.payMethod }} &nbsp;·&nbsp; ${{ o.total.toFixed(2) }}</div>
             <div class="pcard-btns">
               <button class="advance-btn" (click)="advance(o.id, 'cooking')">
@@ -94,9 +90,7 @@
               <div *ngFor="let item of o.items">• {{ item }}</div>
             </div>
             <div class="pcard-note" *ngIf="o.notes">📝 {{ o.notes }}</div>
-            <div class="pcard-address" *ngIf="o.address">
-              📍 {{ o.address }}
-            </div>
+            <div class="pcard-address" *ngIf="o.address">📍 {{ o.address }}</div>
             <div class="pcard-pay">💳 {{ o.payMethod }} &nbsp;·&nbsp; ${{ o.total.toFixed(2) }}</div>
             <div class="pcard-btns">
               <button class="maps-btn" (click)="openMaps(o)">

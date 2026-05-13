@@ -1,98 +1,69 @@
 <ion-header>
   <div class="cart-header">
-    <button class="back-btn" (click)="goBack()">← Menú</button>
+    <button class="back-btn" (click)="goBack()">←</button>
     <h3>Tu pedido</h3>
   </div>
 </ion-header>
 
 <ion-content>
-
-  <!-- Sin items -->
-  <div class="empty-state" *ngIf="!items.length">
-    <div class="empty-ico">🛒</div>
-    <p class="empty-title">Tu carrito está vacío</p>
-    <p class="empty-sub">Agrega algo del menú</p>
+  <div class="cart-empty" *ngIf="!items.length">
+    <div class="ico">🛒</div>
+    <p>Tu carrito está vacío</p>
+    <button class="go-menu-btn" (click)="goBack()">Ver menú</button>
   </div>
 
-  <!-- Items -->
-  <div class="cart-list" *ngIf="items.length">
+  <ng-container *ngIf="items.length">
     <div class="cart-item" *ngFor="let item of items">
-      <img [src]="item.imageUrl" [alt]="item.name" class="item-img" />
-      <div class="item-info">
-        <div class="item-name">{{ item.emoji }} {{ item.name }}</div>
-        <div class="item-variant">{{ item.variant }}</div>
-        <div class="item-extras" *ngIf="item.extras.length">
-          + {{ item.extras.map(e => e.name).join(', ') }}
+      <div class="cart-item-icon">{{ item.emoji }}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">{{ item.name }} — {{ item.variant }}</div>
+        <div class="cart-item-extras">
+          <span *ngIf="!item.extras.length">Sin extras</span>
+          <span *ngIf="item.extras.length">{{ extrasLabel(item) }}</span>
+          <span *ngIf="item.notes"> · "{{ item.notes }}"</span>
         </div>
-        <div class="item-notes" *ngIf="item.notes">📝 {{ item.notes }}</div>
       </div>
-      <div class="item-right">
-        <span class="item-price">${{ fmt(item.price) }}</span>
-        <button class="remove-btn" (click)="remove(item.uid)">✕</button>
+      <div class="cart-item-price">${{ fmt(item.price) }}</div>
+      <button class="cart-remove" (click)="remove(item.uid)">×</button>
+    </div>
+
+    <div class="cart-total-row">
+      <div class="total-line"><span>Subtotal</span><span>${{ fmt(subtotal) }}</span></div>
+      <div class="total-line"><span>Envío</span><span>${{ fmt(deliveryFee) }}</span></div>
+      <div class="total-line big"><span>Total</span><span>${{ fmt(total) }}</span></div>
+    </div>
+
+    <!-- Dirección de entrega -->
+    <div class="address-section">
+      <div class="pay-title">📍 Dirección de entrega</div>
+      <button class="locate-btn" (click)="detectLocation()" [disabled]="locating">
+        <span *ngIf="!locating">📡 Detectar mi ubicación</span>
+        <span *ngIf="locating">⏳ Detectando...</span>
+      </button>
+      <div class="loc-error" *ngIf="locError">{{ locError }}</div>
+      <textarea class="address-input" rows="2" placeholder="O escribe tu dirección manualmente..." autocomplete="off"
+        [(ngModel)]="address">
+      </textarea>
+    </div>
+
+    <div class="pay-section">
+      <div class="pay-title">Método de pago</div>
+      <div class="pay-opts">
+        <div class="pay-opt" [class.sel]="payMethod==='card'" (click)="selectPay('card')">
+          <div class="pay-ico">💳</div>
+          <div class="pay-lbl">Tarjeta</div>
+        </div>
+        <div class="pay-opt" [class.sel]="payMethod==='cash'" (click)="selectPay('cash')">
+          <div class="pay-ico">💵</div>
+          <div class="pay-lbl">Efectivo</div>
+        </div>
+      </div>
+      <div class="cash-field" *ngIf="payMethod==='cash'">
+        <label>¿Con cuánto pagas?</label>
+        <input type="number" placeholder="Ej: 20.00" [(ngModel)]="cashAmount" />
       </div>
     </div>
-  </div>
-
-  <!-- Dirección -->
-  <div class="section-card" *ngIf="items.length">
-    <div class="section-title">📍 Dirección de entrega</div>
-
-    <button class="locate-btn" (click)="detectLocation()" [disabled]="locating">
-      <span *ngIf="!locating">📡 Detectar mi ubicación</span>
-      <span *ngIf="locating">⏳ Detectando...</span>
-    </button>
-
-    <div class="loc-error" *ngIf="locError">{{ locError }}</div>
-
-    <textarea
-      class="address-input"
-      rows="2"
-      placeholder="O escribe tu dirección manualmente..."
-      [(ngModel)]="address">
-    </textarea>
-
-    <div class="address-preview" *ngIf="address && !locating">
-      ✅ {{ address }}
-    </div>
-  </div>
-
-  <!-- Método de pago -->
-  <div class="section-card" *ngIf="items.length">
-    <div class="section-title">💳 Método de pago</div>
-    <div class="pay-row">
-      <button class="pay-btn" [class.sel]="payMethod === 'card'" (click)="selectPay('card')">
-        💳 Tarjeta
-      </button>
-      <button class="pay-btn" [class.sel]="payMethod === 'cash'" (click)="selectPay('cash')">
-        💵 Efectivo
-      </button>
-    </div>
-    <div class="cash-input-wrap" *ngIf="payMethod === 'cash'">
-      <input
-        type="number"
-        class="cash-input"
-        placeholder="¿Con cuánto pagas?"
-        [(ngModel)]="cashAmount"
-      />
-    </div>
-  </div>
-
-  <!-- Totales -->
-  <div class="totals-card" *ngIf="items.length">
-    <div class="total-row">
-      <span>Subtotal</span>
-      <span>${{ fmt(subtotal) }}</span>
-    </div>
-    <div class="total-row">
-      <span>Envío</span>
-      <span>${{ fmt(deliveryFee) }}</span>
-    </div>
-    <div class="total-row grand">
-      <span>Total</span>
-      <span>${{ fmt(total) }}</span>
-    </div>
-  </div>
-
+  </ng-container>
 </ion-content>
 
 <ion-footer *ngIf="items.length">

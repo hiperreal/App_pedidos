@@ -14,7 +14,7 @@ export class CartService {
     pending: Order[]; cooking: Order[]; sent: Order[];
   }>({ pending: [], cooking: [], sent: [] });
   orders$ = this.ordersSubject.asObservable();
- getOrders() { return this.ordersSubject.value; }
+  getOrders() { return this.ordersSubject.value; }
 
   get cartItems(): CartItem[] { return this.cartSubject.value; }
   get cartCount(): number     { return this.cartItems.length; }

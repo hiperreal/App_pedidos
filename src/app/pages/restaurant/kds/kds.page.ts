@@ -25,6 +25,10 @@ export class KdsPage {
   }
 
   openMaps(order: Order): void {
-    window.open('https://www.google.com/maps', '_blank');
+    if (order.lat && order.lng) {
+      window.open(`https://www.google.com/maps?q=${order.lat},${order.lng}`, '_blank');
+    } else {
+      window.open(`https://www.google.com/maps?q=${encodeURIComponent(order.address)}`, '_blank');
+    }
   }
 }

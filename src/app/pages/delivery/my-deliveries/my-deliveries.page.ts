@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CartService } from '../../../core/services/cart';
@@ -9,8 +9,6 @@ type DeliveryStatus = 'sent' | 'picking' | 'onway' | 'delivered';
 
 interface DeliveryOrder extends Order {
   deliveryStatus: DeliveryStatus;
-  map?: L.Map;
-  marker?: L.Marker;
 }
 
 @Component({
@@ -22,10 +20,10 @@ interface DeliveryOrder extends Order {
 export class MyDeliveriesPage implements OnInit, OnDestroy {
   orders: DeliveryOrder[] = [];
   isOnline: boolean = true;
-  selectedOrder: DeliveryOrder | null = null;
   private sub!: Subscription;
   private watchId: number | null = null;
   private maps: Map<number, L.Map> = new Map();
+  private invalidateIntervals: Map<number, any> = new Map();
 
   constructor(
     private router: Router,
@@ -46,45 +44,82 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
     if (this.sub) this.sub.unsubscribe();
     if (this.watchId !== null) navigator.geolocation.clearWatch(this.watchId);
     this.maps.forEach(m => m.remove());
+    this.invalidateIntervals.forEach(i => clearInterval(i));
   }
 
   initMap(order: DeliveryOrder): void {
     setTimeout(() => {
       const mapId = `map-${order.id}`;
       const el = document.getElementById(mapId);
-      if (!el || this.maps.has(order.id)) return;
+      if (!el) return;
 
-      const defaultLat = order.lat || 9.9281;
-      const defaultLng = order.lng || -84.0907;
+      if (this.maps.has(order.id)) {
+        this.maps.get(order.id)!.remove();
+        this.maps.delete(order.id);
+      }
+      if (this.invalidateIntervals.has(order.id)) {
+        clearInterval(this.invalidateIntervals.get(order.id));
+      }
 
-      const map = L.map(mapId, { zoomControl: true }).setView([defaultLat, defaultLng], 14);
+      el.innerHTML = '';
+      el.style.height = '280px';
+      el.style.width = '100%';
+
+      const clientLat = order.lat ?? 9.9281;
+      const clientLng = order.lng ?? -84.0907;
+
+      const map = L.map(el, {
+        zoomControl: true,
+        preferCanvas: false,
+        fadeAnimation: false,
+        zoomAnimation: false,
+        markerZoomAnimation: false,
+        inertia: false,
+      }).setView([clientLat, clientLng], 15);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap'
+        attribution: '© OpenStreetMap',
+        maxZoom: 19,
+        updateWhenIdle: false,
+        updateWhenZooming: true,
+        keepBuffer: 8,
       }).addTo(map);
 
-      // Marcador del cliente
-      if (order.lat && order.lng) {
-        const clientIcon = L.divIcon({
-          html: '<div style="font-size:28px">🏠</div>',
-          className: '',
-          iconSize: [32, 32],
-          iconAnchor: [16, 32],
-        });
-        L.marker([order.lat, order.lng], { icon: clientIcon })
-          .addTo(map)
-          .bindPopup(`<b>Cliente</b><br>${order.address}`)
-          .openPopup();
-      }
+      // Invalidar cada 200ms por 6 segundos
+      const interval = setInterval(() => map.invalidateSize(true), 200);
+      this.invalidateIntervals.set(order.id, interval);
+      setTimeout(() => {
+        clearInterval(interval);
+        this.invalidateIntervals.delete(order.id);
+      }, 6000);
+
+      map.on('zoomstart', () => map.invalidateSize(true));
+      map.on('zoom', () => map.invalidateSize(true));
+      map.on('zoomend', () => {
+        [0, 100, 200, 400, 800].forEach(t =>
+          setTimeout(() => map.invalidateSize(true), t)
+        );
+      });
+
+      const clientIcon = L.divIcon({
+        html: '<div style="font-size:32px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))">🏠</div>',
+        className: '',
+        iconSize: [36, 36],
+        iconAnchor: [18, 36],
+      });
+
+      const clientMarker = L.marker([clientLat, clientLng], { icon: clientIcon })
+        .addTo(map)
+        .bindPopup(`<b>📍 Entregar aquí</b><br>${order.address || 'Dirección del cliente'}`);
+      clientMarker.openPopup();
 
       this.maps.set(order.id, map);
       this.startTracking(order);
-    }, 300);
+    }, 800);
   }
 
   startTracking(order: DeliveryOrder): void {
     if (!navigator.geolocation) return;
-
     const map = this.maps.get(order.id);
     if (!map) return;
 
@@ -93,11 +128,14 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
     let etaDiv: L.Control | null = null;
 
     const deliveryIcon = L.divIcon({
-      html: '<div style="font-size:28px">🛵</div>',
+      html: '<div style="font-size:32px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))">🛵</div>',
       className: '',
-      iconSize: [32, 32],
-      iconAnchor: [16, 32],
+      iconSize: [36, 36],
+      iconAnchor: [18, 36],
     });
+
+    const clientLat = order.lat ?? 0;
+    const clientLng = order.lng ?? 0;
 
     this.watchId = navigator.geolocation.watchPosition(
       async (pos) => {
@@ -109,30 +147,29 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
         if (!deliveryMarker) {
           deliveryMarker = L.marker([dLat, dLng], { icon: deliveryIcon })
             .addTo(map)
-            .bindPopup('🛵 Repartidor');
+            .bindPopup('🛵 Tu ubicación');
         } else {
           deliveryMarker.setLatLng([dLat, dLng]);
         }
 
-        // Dibujar línea entre repartidor y cliente
-        if (order.lat && order.lng) {
+        map.invalidateSize(true);
+
+        if (clientLat !== 0 && clientLng !== 0) {
           if (routeLine) map.removeLayer(routeLine);
           routeLine = L.polyline(
-            [[dLat, dLng], [order.lat, order.lng]],
-            { color: '#ffc107', weight: 3, dashArray: '6,6' }
+            [[dLat, dLng], [clientLat, clientLng]],
+            { color: '#ffc107', weight: 4, dashArray: '8,8' }
           ).addTo(map);
 
-          // Calcular distancia y tiempo estimado
-          const dist = this.calcDistance(dLat, dLng, order.lat, order.lng);
-          const etaMin = Math.ceil((dist / 30) * 60); // 30 km/h promedio
+          const dist = this.calcDistance(dLat, dLng, clientLat, clientLng);
+          const etaMin = Math.ceil((dist / 30) * 60);
 
-          // Mostrar ETA en el mapa
           if (etaDiv) map.removeControl(etaDiv);
           const EtaControl = L.Control.extend({
             onAdd: () => {
               const div = L.DomUtil.create('div');
               div.innerHTML = `
-                <div style="background:#1e1e1e;border:1px solid #ffc107;border-radius:10px;padding:8px 14px;color:#fff;font-size:13px;font-weight:600;">
+                <div style="background:#1e1e1e;border:2px solid #ffc107;border-radius:10px;padding:8px 14px;color:#fff;font-size:13px;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,0.5);">
                   ⏱ ETA: ~${etaMin} min &nbsp;·&nbsp; ${dist.toFixed(1)} km
                 </div>`;
               return div;
@@ -141,8 +178,7 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
           etaDiv = new EtaControl({ position: 'bottomleft' });
           etaDiv.addTo(map);
 
-          // Centrar mapa entre los dos puntos
-          map.fitBounds([[dLat, dLng], [order.lat, order.lng]], { padding: [40, 40] });
+          map.fitBounds([[dLat, dLng], [clientLat, clientLng]], { padding: [50, 50] });
         }
       },
       () => {},

@@ -24,12 +24,19 @@ export class AuthService {
   private auth = getAuth();
   private db   = getFirestore();
   currentUser: UserProfile | null = null;
+  private explicitLogin = false;
 
   constructor(private router: Router) {
     onAuthStateChanged(this.auth, async (user) => {
       if (user) {
         this.currentUser = await this.getUserProfile(user.uid);
-        this.redirectByRole(this.currentUser?.role);
+        // Solo redirige si fue un login explícito, no al restaurar sesión
+        if (this.explicitLogin) {
+          this.explicitLogin = false;
+          this.redirectByRole(this.currentUser?.role);
+        }
+      } else {
+        this.currentUser = null;
       }
     });
   }
@@ -43,12 +50,14 @@ export class AuthService {
   }
 
   async login(email: string, password: string): Promise<void> {
+    this.explicitLogin = true;
     const cred = await signInWithEmailAndPassword(this.auth, email, password);
     this.currentUser = await this.getUserProfile(cred.user.uid);
     this.redirectByRole(this.currentUser?.role);
   }
 
   async loginWithGoogle(): Promise<void> {
+    this.explicitLogin = true;
     const provider = new GoogleAuthProvider();
     const cred = await signInWithPopup(this.auth, provider);
     const existing = await this.getUserProfile(cred.user.uid);
@@ -80,11 +89,11 @@ export class AuthService {
 
   redirectByRole(role?: string): void {
     switch (role) {
-      case 'client':      this.router.navigate(['/client/home']); break;
-      case 'restaurant':  this.router.navigate(['/restaurant/kds']); break;
-      case 'delivery':    this.router.navigate(['/delivery/my-deliveries']); break;
-      case 'admin':       this.router.navigate(['/admin/dashboard']); break;
-      default:            this.router.navigate(['/login']); break;
+      case 'client':     this.router.navigate(['/client/home']); break;
+      case 'restaurant': this.router.navigate(['/restaurant/kds']); break;
+      case 'delivery':   this.router.navigate(['/delivery/my-deliveries']); break;
+      case 'admin':      this.router.navigate(['/admin/dashboard']); break;
+      default:           this.router.navigate(['/login']); break;
     }
   }
 }

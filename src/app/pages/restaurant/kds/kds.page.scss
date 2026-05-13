@@ -108,10 +108,10 @@ ion-content {
     align-items: center;
     margin-bottom: 12px;
 
-    .pcard-num  {
-      font-size: 22px;
+    .pcard-num {
+      font-size: 26px;
       font-weight: 800;
-      color: #fff;
+      color: #ffc107;
     }
     .pcard-time {
       font-size: 14px;
@@ -120,15 +120,15 @@ ion-content {
   }
 
   .pcard-items {
-  font-size: 16px;
-  color: #fff;
-  line-height: 2.2;
-  margin-bottom: 10px;
-  border-top: 1px solid #2a2a2a;
-  padding-top: 10px;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-}
+    font-size: 16px;
+    color: #fff;
+    line-height: 2.2;
+    margin-bottom: 10px;
+    border-top: 1px solid #2a2a2a;
+    padding-top: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
 
   .pcard-note {
     font-size: 14px;
@@ -141,10 +141,22 @@ ion-content {
     line-height: 1.5;
   }
 
+  .pcard-address {
+    font-size: 13px;
+    color: #4fc3f7;
+    background: #0a1e2e;
+    border: 1px solid #1565c0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+
   .pcard-pay {
-    font-size: 14px;
-    color: #888;
+    font-size: 15px;
+    color: #bbb;
     margin-bottom: 14px;
+    font-weight: 500;
   }
 
   .pcard-btns {
@@ -198,15 +210,4 @@ ion-content {
       font-weight: 600;
     }
   }
-}
-
-.pcard-address {
-  font-size: 13px;
-  color: #4fc3f7;
-  background: #0a1e2e;
-  border: 1px solid #1565c0;
-  border-radius: 8px;
-  padding: 8px 12px;
-  margin-bottom: 10px;
-  line-height: 1.5;
 }

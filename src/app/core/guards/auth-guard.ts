@@ -6,8 +6,10 @@ import { getAuth } from 'firebase/auth';
 export class AuthGuard implements CanActivate {
   constructor(private router: Router) {}
 
-  canActivate(): boolean {
-    const user = getAuth().currentUser;
+  async canActivate(): Promise<boolean> {
+    const auth = getAuth();
+    await auth.authStateReady();
+    const user = auth.currentUser;
     if (user) return true;
     this.router.navigate(['/login']);
     return false;

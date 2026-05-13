@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ToastController, IonHeader, IonContent, IonFooter, IonToolbar, IonTitle } from '@ionic/angular/standalone';
+import { ToastController, IonHeader, IonContent, IonFooter } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CartItem } from '../../../core/models/menu.model';
@@ -12,7 +12,7 @@ import { CartService } from '../../../core/services/cart';
   standalone: true,
   templateUrl: './cart.page.html',
   styleUrls: ['./cart.page.scss'],
-  imports: [IonTitle, IonToolbar, CommonModule, FormsModule, IonHeader, IonContent, IonFooter],
+  imports: [CommonModule, FormsModule, IonHeader, IonContent, IonFooter],
 })
 export class CartPage implements OnInit, OnDestroy {
   items: CartItem[] = [];
@@ -32,10 +32,11 @@ export class CartPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.sub = this.cartService.cart$.subscribe(
-      (items) => { this.items = items; }
-    );
-  }
+  this.sub = this.cartService.cart$.subscribe(
+    (items) => { this.items = items; }
+  );
+  this.detectLocation();
+}
 
   ngOnDestroy(): void {
     if (this.sub) this.sub.unsubscribe();
@@ -46,6 +47,10 @@ export class CartPage implements OnInit, OnDestroy {
   get total(): number       { return this.cartService.total; }
 
   fmt(val: number): string { return val.toFixed(2); }
+
+  extrasLabel(item: CartItem): string {
+    return item.extras.map(e => e.name).join(', ');
+  }
 
   remove(uid: number): void { this.cartService.removeItem(uid); }
 
