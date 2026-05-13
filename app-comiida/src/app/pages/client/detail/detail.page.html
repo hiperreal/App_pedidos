@@ -1,0 +1,61 @@
+<ion-header>
+  <div class="detail-top">
+    <button class="back-btn" (click)="goBack()">← Menú</button>
+    <h3>{{ item?.name }}</h3>
+  </div>
+</ion-header>
+
+<ion-content *ngIf="item">
+
+  <div class="detail-hero">
+    <img [src]="item.imageUrl" [alt]="item.name" />
+  </div>
+
+  <!-- Extras -->
+  <div class="opt-card" *ngIf="item.extras.length">
+    <div class="opt-card-title">Ingredientes extra</div>
+    <div class="opt-row" *ngFor="let extra of item.extras; let i = index">
+      <div class="opt-left">
+        <div class="opt-name">{{ extra.name }}</div>
+        <div class="opt-price">+${{ extra.price | number:'1.2-2' }}</div>
+      </div>
+      <div class="counter">
+        <button class="ctr-btn" (click)="changeExtra(i, -1)">−</button>
+        <span class="ctr-val">{{ extraQty[i] }}</span>
+        <button class="ctr-btn" (click)="changeExtra(i, 1)">+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Variantes -->
+  <div class="opt-card">
+    <div class="opt-card-title">{{ item.variants.label }}</div>
+    <div class="variants-row">
+      <button
+        *ngFor="let opt of item.variants.options"
+        class="var-btn"
+        [class.sel]="selectedVariant === opt"
+        (click)="selectVariant(opt)">
+        {{ opt }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Notas -->
+  <div class="opt-card">
+    <div class="opt-card-title">Notas especiales</div>
+    <textarea
+      class="notes-input"
+      rows="2"
+      placeholder="Sin cebolla, extra salsa..."
+      [(ngModel)]="notes">
+    </textarea>
+  </div>
+
+</ion-content>
+
+<ion-footer *ngIf="item">
+  <button class="add-cart-btn" (click)="addToCart()">
+    Agregar al carrito — ${{ currentPrice | number:'1.2-2' }}
+  </button>
+</ion-footer>

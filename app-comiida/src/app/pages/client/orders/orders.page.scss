@@ -1,0 +1,95 @@
+.orders-header {
+  background: #1e1e1e;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  .back-btn {
+    background: none; border: none; color: #fff;
+    font-size: 20px; cursor: pointer;
+  }
+  h3 { color: #fff; font-size: 16px; font-weight: 600; margin: 0; }
+}
+
+ion-content { --background: #121212; }
+
+.empty-state {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 80px 20px; gap: 10px;
+  .empty-ico  { font-size: 56px; }
+  .empty-title { color: #fff; font-size: 16px; font-weight: 600; margin: 0; }
+  .empty-sub   { color: #888; font-size: 13px; margin: 0; }
+  .go-btn {
+    margin-top: 14px; background: #ffc107; color: #000;
+    border: none; border-radius: 10px; padding: 12px 28px;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+  }
+}
+
+.orders-list {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.order-card {
+  background: #1e1e1e;
+  border-radius: 14px;
+  padding: 14px;
+  border-left: 4px solid #ffc107;
+
+  .order-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    .order-num  { color: #fff; font-size: 14px; font-weight: 700; }
+    .order-status { font-size: 12px; font-weight: 600; }
+  }
+
+  .order-items {
+    margin-bottom: 8px;
+    .order-item { color: #ccc; font-size: 12px; line-height: 1.8; }
+  }
+
+  .order-notes {
+    background: #2a2a2a; border-radius: 8px;
+    padding: 6px 10px; font-size: 11px;
+    color: #ffc107; margin-bottom: 8px;
+  }
+
+  .order-card-footer {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-bottom: 14px;
+    .order-pay   { color: #888; font-size: 11px; }
+    .order-total { color: #ffc107; font-size: 15px; font-weight: 700; }
+  }
+
+  .progress-bar {
+    display: flex;
+    align-items: center;
+
+    .progress-step {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 4px;
+
+      .step-dot {
+        width: 10px; height: 10px;
+        border-radius: 50%; background: #333;
+        transition: background 0.3s;
+      }
+      .step-label { font-size: 9px; color: #666; white-space: nowrap; }
+
+      &.active .step-dot { background: #ffc107; }
+      &.active .step-label { color: #ffc107; }
+    }
+
+    .progress-line {
+      flex: 1; height: 2px; background: #333; margin: 0 4px 14px;
+      transition: background 0.3s;
+      &.active { background: #ffc107; }
+    }
+  }
+}

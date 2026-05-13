@@ -1,0 +1,55 @@
+<ion-header [translucent]="false" class="ion-no-border">
+  <div class="home-header">
+    <div class="brand-row">
+      <h3>BurgerHub 🍔</h3>
+      <div class="cart-icon" (click)="goToCart()" *ngIf="cartCount > 0">
+        <ion-icon name="cart"></ion-icon>
+        <span class="badge">{{ cartCount }}</span>
+      </div>
+    </div>
+    <p class="sub">¿Qué se te antoja hoy?</p>
+    <div class="search-box">
+      <ion-icon name="search-outline"></ion-icon>
+      <input type="text" placeholder="Buscar platillos..." class="inner-input">
+    </div>
+  </div>
+
+  <div class="cats-bar">
+    <button
+      *ngFor="let cat of categories"
+      class="cat-btn"
+      [class.active]="activeCat === cat"
+      (click)="filterCat(cat)">
+      {{ cat }}
+    </button>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="sec-title">{{ sectionTitle }}</div>
+
+  <div class="items-grid">
+    <div
+      *ngFor="let item of filteredItems"
+      class="item-card"
+      (click)="openDetail(item)">
+      <div class="item-thumb">
+        <img [src]="item.imageUrl" [alt]="item.name" loading="lazy" />
+      </div>
+      <div class="item-info">
+        <div class="item-name">{{ item.name }}</div>
+        <div class="price-row">
+          <span class="item-price">${{ item.basePrice.toFixed(2) }}</span>
+          <button class="item-add" (click)="openDetail(item)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-access">
+    <button (click)="goToOrders()" class="kds-btn orders-btn">
+      📦 Mis pedidos
+    </button>
+  </div>
+
+</ion-content>

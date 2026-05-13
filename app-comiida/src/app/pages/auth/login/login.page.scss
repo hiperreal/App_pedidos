@@ -1,0 +1,128 @@
+ion-content {
+  --background: #121212;
+}
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 32px;
+
+  .logo { font-size: 56px; margin-bottom: 8px; }
+  h1 { color: #fff; font-size: 28px; font-weight: 800; margin: 0; }
+  p  { color: #888; font-size: 14px; margin-top: 6px; }
+}
+
+.login-form {
+  width: 100%;
+  max-width: 400px;
+
+  .input-group {
+    margin-bottom: 16px;
+
+    label {
+      display: block;
+      color: #aaa;
+      font-size: 12px;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      background: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      box-sizing: border-box;
+      &:focus { border-color: #ffc107; }
+    }
+  }
+
+  .btn-primary {
+    width: 100%;
+    background: #ffc107;
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+
+  .divider {
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: #333;
+    }
+    span {
+      background: #121212;
+      color: #666;
+      padding: 0 12px;
+      position: relative;
+      font-size: 13px;
+    }
+  }
+
+  .btn-google {
+    width: 100%;
+    background: #1e1e1e;
+    color: #fff;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    .google-icon {
+      background: #fff;
+      color: #333;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+  }
+
+  .register-link {
+    text-align: center;
+    margin-top: 24px;
+    color: #666;
+    font-size: 13px;
+
+    a {
+      color: #ffc107;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  }
+}

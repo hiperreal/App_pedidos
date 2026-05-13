@@ -1,0 +1,90 @@
+<ion-header>
+  <div class="admin-header">
+    <div class="header-left">
+      <h3>🖥 Panel Admin</h3>
+      <p class="header-sub">BurgerHub Dashboard</p>
+    </div>
+    <button class="logout-btn" (click)="logout()">Salir</button>
+  </div>
+</ion-header>
+
+<ion-content>
+
+  <!-- Métricas principales -->
+  <div class="metrics-grid">
+
+    <div class="metric-card revenue">
+      <div class="metric-ico">💰</div>
+      <div class="metric-val">${{ totalRevenue.toFixed(2) }}</div>
+      <div class="metric-lbl">Ingresos totales</div>
+    </div>
+
+    <div class="metric-card orders">
+      <div class="metric-ico">🧾</div>
+      <div class="metric-val">{{ totalOrders }}</div>
+      <div class="metric-lbl">Pedidos totales</div>
+    </div>
+
+    <div class="metric-card pending">
+      <div class="metric-ico">⏳</div>
+      <div class="metric-val">{{ pendingOrders }}</div>
+      <div class="metric-lbl">Pendientes</div>
+    </div>
+
+    <div class="metric-card cooking">
+      <div class="metric-ico">👨‍🍳</div>
+      <div class="metric-val">{{ cookingOrders }}</div>
+      <div class="metric-lbl">En cocina</div>
+    </div>
+
+    <div class="metric-card sent">
+      <div class="metric-ico">🛵</div>
+      <div class="metric-val">{{ sentOrders }}</div>
+      <div class="metric-lbl">Enviados</div>
+    </div>
+
+    <div class="metric-card kds" (click)="goToKds()">
+      <div class="metric-ico">📺</div>
+      <div class="metric-val">KDS</div>
+      <div class="metric-lbl">Ver cocina</div>
+    </div>
+
+  </div>
+
+  <!-- Productos más pedidos -->
+  <div class="section-title">🏆 Productos más pedidos</div>
+
+  <div class="top-products" *ngIf="topProducts.length">
+    <div class="product-row" *ngFor="let p of topProducts; let i = index">
+      <div class="product-rank">#{{ i + 1 }}</div>
+      <div class="product-emoji">{{ p.emoji }}</div>
+      <div class="product-name">{{ p.name }}</div>
+      <div class="product-count">{{ p.count }} pedidos</div>
+    </div>
+  </div>
+
+  <div class="no-data" *ngIf="!topProducts.length">
+    <p>Aún no hay pedidos registrados</p>
+  </div>
+
+  <!-- Últimos pedidos -->
+  <div class="section-title">📋 Últimos pedidos</div>
+
+  <div class="orders-list" *ngIf="allOrders.length">
+    <div class="order-row" *ngFor="let order of allOrders">
+      <div class="order-row-left">
+        <span class="order-num">{{ order.num }}</span>
+        <span class="order-items-count">{{ order.items.length }} ítem(s)</span>
+      </div>
+      <div class="order-row-right">
+        <span class="order-pay">{{ order.payMethod }}</span>
+        <span class="order-total">${{ order.total.toFixed(2) }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="no-data" *ngIf="!allOrders.length">
+    <p>Sin pedidos aún</p>
+  </div>
+
+</ion-content>

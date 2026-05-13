@@ -1,0 +1,78 @@
+<ion-content>
+  <div class="register-container">
+
+    <div class="register-header">
+      <button class="back-btn" (click)="goToLogin()">←</button>
+      <div class="logo">🍔</div>
+      <h1>Crear cuenta</h1>
+      <p>Únete a BurgerHub</p>
+    </div>
+
+    <div class="register-form">
+
+      <div class="input-group">
+        <label>Nombre completo</label>
+        <input type="text" placeholder="Tu nombre" [(ngModel)]="name" />
+      </div>
+
+      <div class="input-group">
+        <label>Correo electrónico</label>
+        <input type="email" placeholder="tu@correo.com" [(ngModel)]="email" />
+      </div>
+
+      <div class="input-group">
+        <label>Contraseña</label>
+        <input type="password" placeholder="Mínimo 6 caracteres" [(ngModel)]="password" />
+      </div>
+
+      <div class="input-group">
+        <label>Confirmar contraseña</label>
+        <input type="password" placeholder="Repite tu contraseña" [(ngModel)]="confirmPassword" />
+      </div>
+
+      <div class="input-group">
+        <label>Tipo de cuenta</label>
+        <div class="role-selector">
+          <div
+            class="role-opt"
+            [class.active]="role === 'client'"
+            (click)="role = 'client'">
+            <span class="role-ico">👤</span>
+            <span>Cliente</span>
+          </div>
+          <div
+            class="role-opt"
+            [class.active]="role === 'restaurant'"
+            (click)="role = 'restaurant'">
+            <span class="role-ico">🍽</span>
+            <span>Restaurante</span>
+          </div>
+          <div
+            class="role-opt"
+            [class.active]="role === 'delivery'"
+            (click)="role = 'delivery'">
+            <span class="role-ico">🛵</span>
+            <span>Repartidor</span>
+          </div>
+          <div
+            class="role-opt"
+            [class.active]="role === 'admin'"
+            (click)="role = 'admin'">
+            <span class="role-ico">🖥</span>
+            <span>Admin</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary" (click)="register()">
+        Crear cuenta
+      </button>
+
+      <div class="login-link">
+        ¿Ya tienes cuenta?
+        <a (click)="goToLogin()">Inicia sesión</a>
+      </div>
+
+    </div>
+  </div>
+</ion-content>
