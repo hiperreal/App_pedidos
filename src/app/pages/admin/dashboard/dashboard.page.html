@@ -13,27 +13,27 @@
   <div class="metrics-grid">
     <div class="metric-card revenue">
       <div class="metric-ico">💰</div>
-      <div class="metric-val">${{ totalRevenue.toFixed(2) }}</div>
+      <div class="metric-val">₡{{ totalRevenue.toFixed(2) }}</div>
       <div class="metric-lbl">Ingresos totales</div>
     </div>
     <div class="metric-card orders">
       <div class="metric-ico">🧾</div>
-      <div class="metric-val">{{ totalOrders }}</div>
+      <div class="metric-val">₡{{ totalOrders }}</div>
       <div class="metric-lbl">Pedidos totales</div>
     </div>
     <div class="metric-card pending">
       <div class="metric-ico">⏳</div>
-      <div class="metric-val">{{ pendingOrders }}</div>
+      <div class="metric-val">₡{{ pendingOrders }}</div>
       <div class="metric-lbl">Pendientes</div>
     </div>
     <div class="metric-card cooking">
       <div class="metric-ico">👨‍🍳</div>
-      <div class="metric-val">{{ cookingOrders }}</div>
+      <div class="metric-val">₡{{ cookingOrders }}</div>
       <div class="metric-lbl">En cocina</div>
     </div>
     <div class="metric-card sent">
       <div class="metric-ico">🛵</div>
-      <div class="metric-val">{{ sentOrders }}</div>
+      <div class="metric-val">₡{{ sentOrders }}</div>
       <div class="metric-lbl">Enviados</div>
     </div>
     <div class="metric-card kds" (click)="goToKds()">
@@ -69,7 +69,8 @@
       </div>
       <div class="order-row-right">
         <span class="order-pay">{{ order.payMethod }}</span>
-        <span class="order-total">${{ order.total.toFixed(2) }}</span>
+        <span class="order-total">
+          ₡{{ order.total.toFixed(2) }}</span>
       </div>
     </div>
   </div>

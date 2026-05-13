@@ -1,7 +1,7 @@
 <ion-header>
   <div class="panel-head">
     <div class="live-dot"></div>
-    <h3>Panel del Restaurante</h3>
+    <h3>La Central del Sabor - Conina</h3>
   </div>
 </ion-header>
 
@@ -29,7 +29,7 @@
             </div>
             <div class="pcard-note" *ngIf="o.notes">📝 {{ o.notes }}</div>
             <div class="pcard-address" *ngIf="o.address">📍 {{ o.address }}</div>
-            <div class="pcard-pay">💳 {{ o.payMethod }} &nbsp;·&nbsp; ${{ o.total.toFixed(2) }}</div>
+            <div class="pcard-pay">💳 {{ o.payMethod }} &nbsp;·&nbsp; ₡{{ o.total.toFixed(2) }}</div>
             <div class="pcard-btns">
               <button class="advance-btn" (click)="advance(o.id, 'pending')">
                 → Enviar a cocina
@@ -60,7 +60,7 @@
             </div>
             <div class="pcard-note" *ngIf="o.notes">📝 {{ o.notes }}</div>
             <div class="pcard-address" *ngIf="o.address">📍 {{ o.address }}</div>
-            <div class="pcard-pay">💳 {{ o.payMethod }} &nbsp;·&nbsp; ${{ o.total.toFixed(2) }}</div>
+            <div class="pcard-pay">💳 {{ o.payMethod }} &nbsp;·&nbsp; ₡{{ o.total.toFixed(2) }}</div>
             <div class="pcard-btns">
               <button class="advance-btn" (click)="advance(o.id, 'cooking')">
                 → Marcar enviado
@@ -91,7 +91,7 @@
             </div>
             <div class="pcard-note" *ngIf="o.notes">📝 {{ o.notes }}</div>
             <div class="pcard-address" *ngIf="o.address">📍 {{ o.address }}</div>
-            <div class="pcard-pay">💳 {{ o.payMethod }} &nbsp;·&nbsp; ${{ o.total.toFixed(2) }}</div>
+            <div class="pcard-pay">💳 {{ o.payMethod }} &nbsp;·&nbsp; ₡{{ o.total.toFixed(2) }}</div>
             <div class="pcard-btns">
               <button class="maps-btn" (click)="openMaps(o)">
                 <div class="maps-dot"></div> Ver en Maps

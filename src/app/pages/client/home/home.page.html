@@ -1,7 +1,7 @@
 <ion-header [translucent]="false" class="ion-no-border">
   <div class="home-header">
     <div class="brand-row">
-      <h3>BurgerHub 🍔</h3>
+      <h3>🍔 La Central del Sabor</h3>
       <div class="cart-icon" (click)="goToCart()" *ngIf="cartCount > 0">
         <ion-icon name="cart"></ion-icon>
         <span class="badge">{{ cartCount }}</span>
@@ -39,7 +39,7 @@
       <div class="item-info">
         <div class="item-name">{{ item.name }}</div>
         <div class="price-row">
-          <span class="item-price">${{ item.basePrice.toFixed(2) }}</span>
+          <span class="item-price">₡{{ item.basePrice.toLocaleString() }}</span>
           <button class="item-add" (click)="openDetail(item)">+</button>
         </div>
       </div>

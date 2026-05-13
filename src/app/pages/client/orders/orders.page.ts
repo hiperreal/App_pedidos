@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { CartService } from '../../../core/services/cart';
 import { Order } from '../../../core/models/menu.model';
 import * as L from 'leaflet';
+import { Unsubscribe } from 'firebase/firestore';
 
 @Component({
   selector: 'app-orders',
@@ -15,10 +16,12 @@ export class OrdersPage implements OnInit, OnDestroy {
   orders: Order[] = [];
   trackedOrder: Order | null = null;
   private sub!: Subscription;
+  private firestoreSub: Unsubscribe | null = null;
   private map: L.Map | null = null;
   private clientMarker: L.Marker | null = null;
   private deliveryMarker: L.Marker | null = null;
   private routeLine: L.Polyline | null = null;
+  private invalidateInterval: any = null;
 
   constructor(
     private router: Router,
@@ -28,19 +31,34 @@ export class OrdersPage implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub = this.cartService.orders$.subscribe(data => {
       this.orders = [...data.pending, ...data.cooking, ...data.sent];
-      if (this.trackedOrder) {
-        const updated = this.orders.find(o => o.id === this.trackedOrder!.id);
-        if (updated) {
-          this.trackedOrder = updated;
-          this.updateMap(updated);
-        }
-      }
     });
   }
 
   ngOnDestroy(): void {
     if (this.sub) this.sub.unsubscribe();
-    if (this.map) this.map.remove();
+    this.stopFirestoreListener();
+    this.destroyMap();
+  }
+
+  private stopFirestoreListener(): void {
+    if (this.firestoreSub) {
+      this.firestoreSub();
+      this.firestoreSub = null;
+    }
+  }
+
+  private destroyMap(): void {
+    if (this.invalidateInterval) {
+      clearInterval(this.invalidateInterval);
+      this.invalidateInterval = null;
+    }
+    if (this.map) {
+      this.map.remove();
+      this.map = null;
+    }
+    this.clientMarker = null;
+    this.deliveryMarker = null;
+    this.routeLine = null;
   }
 
   getStatusLabel(order: Order): string {
@@ -60,35 +78,90 @@ export class OrdersPage implements OnInit, OnDestroy {
   }
 
   trackOrder(order: Order): void {
+    this.stopFirestoreListener();
     this.trackedOrder = order;
-    setTimeout(() => this.initMap(order), 300);
+
+    setTimeout(() => {
+      this.initMap(order);
+
+      // Escuchar Firestore en tiempo real para ubicación del repartidor
+      this.firestoreSub = this.cartService.listenToOrder(order.id, (data) => {
+        if (this.trackedOrder && data.deliveryLat && data.deliveryLng) {
+          this.trackedOrder = { ...this.trackedOrder, ...data };
+          this.updateMap(this.trackedOrder);
+        }
+      });
+    }, 300);
   }
 
   closeTracking(): void {
+    this.stopFirestoreListener();
     this.trackedOrder = null;
-    if (this.map) {
-      this.map.remove();
-      this.map = null;
-    }
+    this.destroyMap();
   }
 
   initMap(order: Order): void {
-    if (this.map) {
-      this.map.remove();
-      this.map = null;
-    }
+    this.destroyMap();
 
     const lat = order.lat || 9.9281;
     const lng = order.lng || -84.0907;
 
-    this.map = L.map('client-map').setView([lat, lng], 14);
+    const el = document.getElementById('client-map');
+    if (!el) return;
+
+    el.style.height = '280px';
+    el.style.width = '100%';
+    el.innerHTML = '';
+
+    this.map = L.map(el, {
+      zoomControl: true,
+      preferCanvas: false,
+      fadeAnimation: false,
+      zoomAnimation: false,
+      markerZoomAnimation: false,
+      inertia: false,
+    }).setView([lat, lng], 14);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap'
+      attribution: '© OpenStreetMap',
+      maxZoom: 19,
+      updateWhenIdle: false,
+      updateWhenZooming: true,
+      keepBuffer: 8,
     }).addTo(this.map);
 
+    // Fix mapa negro — invalidar tamaño continuamente al inicio
+    this.invalidateInterval = setInterval(() => this.map?.invalidateSize(true), 200);
+    setTimeout(() => {
+      clearInterval(this.invalidateInterval);
+      this.invalidateInterval = null;
+    }, 6000);
+
+    // Fix zoom negro
+    this.map.on('zoomstart', () => {
+      el.style.opacity = '0.99';
+      this.map?.invalidateSize(true);
+    });
+    this.map.on('zoom', () => this.map?.invalidateSize(true));
+    this.map.on('zoomend', () => {
+      el.style.opacity = '1';
+      [0, 50, 100, 200, 400, 800].forEach(t =>
+        setTimeout(() => {
+          this.map?.invalidateSize(true);
+          this.map?.eachLayer((layer: any) => {
+            if (layer._tiles) {
+              Object.values(layer._tiles).forEach((tile: any) => {
+                if (tile.el) tile.el.style.opacity = '1';
+              });
+            }
+          });
+        }, t)
+      );
+    });
+    this.map.on('moveend', () => this.map?.invalidateSize(true));
+
     const clientIcon = L.divIcon({
-      html: '<div style="font-size:28px">🏠</div>',
+      html: '<div style="font-size:28px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))">🏠</div>',
       className: '',
       iconSize: [32, 32],
       iconAnchor: [16, 32],
@@ -97,7 +170,7 @@ export class OrdersPage implements OnInit, OnDestroy {
     if (order.lat && order.lng) {
       this.clientMarker = L.marker([order.lat, order.lng], { icon: clientIcon })
         .addTo(this.map)
-        .bindPopup(`<b>Tu dirección</b><br>${order.address}`)
+        .bindPopup(`<b>📍 Tu dirección</b><br>${order.address}`)
         .openPopup();
     }
 
@@ -108,7 +181,7 @@ export class OrdersPage implements OnInit, OnDestroy {
     if (!this.map) return;
 
     const deliveryIcon = L.divIcon({
-      html: '<div style="font-size:28px">🛵</div>',
+      html: '<div style="font-size:28px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))">🛵</div>',
       className: '',
       iconSize: [32, 32],
       iconAnchor: [16, 32],
@@ -136,6 +209,8 @@ export class OrdersPage implements OnInit, OnDestroy {
           { padding: [40, 40] }
         );
       }
+
+      this.map.invalidateSize(true);
     }
   }
 
@@ -152,7 +227,7 @@ export class OrdersPage implements OnInit, OnDestroy {
       Math.sin(dLng/2) * Math.sin(dLng/2);
     const dist = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     const etaMin = Math.ceil((dist / 30) * 60);
-    return `~${etaMin} min (${dist.toFixed(1)} km)`;
+    return `~${etaMin} min · ${dist.toFixed(1)} km`;
   }
 
   goBack(): void {

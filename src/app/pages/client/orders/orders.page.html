@@ -1,6 +1,6 @@
 <ion-header>
   <div class="orders-header">
-    <button class="back-btn" (click)="goHome()">←</button>
+    <button class="back-btn" (click)="goBack()">←</button>
     <h3>Mis pedidos</h3>
   </div>
 </ion-header>
@@ -8,61 +8,82 @@
 <ion-content>
 
   <!-- Sin pedidos -->
-  <div class="empty-state" *ngIf="!allOrders.length">
+  <div class="empty-state" *ngIf="!orders.length">
     <div class="empty-ico">🍽</div>
     <p class="empty-title">Aún no tienes pedidos</p>
     <p class="empty-sub">Agrega algo delicioso al carrito</p>
-    <button class="go-btn" (click)="goHome()">Ver menú</button>
+    <button class="go-btn" (click)="goBack()">Ver menú</button>
   </div>
 
   <!-- Lista de pedidos -->
-  <div class="orders-list" *ngIf="allOrders.length">
-    <div class="order-card" *ngFor="let order of allOrders">
+  <div class="orders-list" *ngIf="orders.length">
+    <div class="order-card" *ngFor="let order of orders">
 
-      <!-- Header de la tarjeta -->
       <div class="order-card-header">
         <div class="order-num">{{ order.num }}</div>
         <div class="order-status" [style.color]="getStatusColor(order)">
-          {{ getStatusEmoji(order) }} {{ getStatus(order) }}
+          {{ getStatusLabel(order) }}
         </div>
       </div>
 
-      <!-- Items del pedido -->
       <div class="order-items">
         <div class="order-item" *ngFor="let item of order.items">
           • {{ item }}
         </div>
       </div>
 
-      <!-- Notas -->
       <div class="order-notes" *ngIf="order.notes">
         📝 {{ order.notes }}
       </div>
 
-      <!-- Dirección -->
       <div class="order-address" *ngIf="order.address">
         📍 {{ order.address }}
       </div>
 
-      <!-- Footer -->
       <div class="order-card-footer">
         <div class="order-pay">💳 {{ order.payMethod }}</div>
-        <div class="order-total">${{ order.total.toFixed(2) }}</div>
+        <div class="order-total">₡{{ order.total.toFixed(2) }}</div>
+      </div>
+
+      <!-- Seguimiento GPS -->
+      <div class="track-section" *ngIf="getStatusLabel(order).includes('camino')">
+        <button class="btn-track" (click)="trackOrder(order)" *ngIf="trackedOrder?.id !== order.id">
+          🗺 Ver ruta en tiempo real
+        </button>
+        <div *ngIf="trackedOrder?.id === order.id">
+          <div class="eta-bar">⏱ ETA: {{ calcEta(order) }}</div>
+          <div id="client-map" class="client-map-box"></div>
+          <button class="btn-close-map" (click)="closeTracking()">Cerrar mapa</button>
+        </div>
       </div>
 
       <!-- Barra de progreso -->
       <div class="progress-bar">
-        <div class="progress-step" [class.active]="true">
+        <div class="progress-step active">
           <div class="step-dot"></div>
           <div class="step-label">Recibido</div>
         </div>
-        <div class="progress-line" [class.active]="getStatus(order) !== 'Pendiente'"></div>
-        <div class="progress-step" [class.active]="getStatus(order) !== 'Pendiente'">
+        <div class="progress-line"
+          [class.active]="!getStatusLabel(order).includes('Pendiente')">
+        </div>
+        <div class="progress-step"
+          [class.active]="!getStatusLabel(order).includes('Pendiente')">
           <div class="step-dot"></div>
           <div class="step-label">Preparando</div>
         </div>
-        <div class="progress-line" [class.active]="getStatus(order) === 'Entregado'"></div>
-        <div class="progress-step" [class.active]="getStatus(order) === 'Entregado'">
+        <div class="progress-line"
+          [class.active]="getStatusLabel(order).includes('camino') || getStatusLabel(order).includes('Entregado')">
+        </div>
+        <div class="progress-step"
+          [class.active]="getStatusLabel(order).includes('camino') || getStatusLabel(order).includes('Entregado')">
+          <div class="step-dot"></div>
+          <div class="step-label">En camino</div>
+        </div>
+        <div class="progress-line"
+          [class.active]="getStatusLabel(order).includes('Entregado')">
+        </div>
+        <div class="progress-step"
+          [class.active]="getStatusLabel(order).includes('Entregado')">
           <div class="step-dot"></div>
           <div class="step-label">Entregado</div>
         </div>

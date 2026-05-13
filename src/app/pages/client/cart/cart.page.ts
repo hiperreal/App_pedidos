@@ -96,7 +96,7 @@ export class CartPage implements OnInit, OnDestroy {
       return;
     }
     const payLabel = this.payMethod === 'cash'
-      ? `Efectivo ($${this.cashAmount})` : 'Tarjeta';
+      ? `Efectivo (₡${this.cashAmount})` : 'Tarjeta';
     const num = this.cartService.placeOrder(
       payLabel,
       this.address,

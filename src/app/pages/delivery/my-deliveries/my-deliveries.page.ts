@@ -93,13 +93,34 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
         this.invalidateIntervals.delete(order.id);
       }, 6000);
 
-      map.on('zoomstart', () => map.invalidateSize(true));
-      map.on('zoom', () => map.invalidateSize(true));
-      map.on('zoomend', () => {
-        [0, 100, 200, 400, 800].forEach(t =>
-          setTimeout(() => map.invalidateSize(true), t)
-        );
+      map.on('zoomstart', () => {
+  el.style.opacity = '0.99';
+  map.invalidateSize(true);
+});
+
+map.on('zoom', () => {
+  map.invalidateSize(true);
+});
+
+map.on('zoomend', () => {
+  el.style.opacity = '1';
+  [0, 50, 100, 200, 400, 800, 1200].forEach(t =>
+    setTimeout(() => {
+      map.invalidateSize(true);
+      map.eachLayer((layer: any) => {
+        if (layer._tiles) {
+          Object.values(layer._tiles).forEach((tile: any) => {
+            if (tile.el) tile.el.style.opacity = '1';
+          });
+        }
       });
+    }, t)
+  );
+});
+
+map.on('moveend', () => {
+  map.invalidateSize(true);
+});
 
       const clientIcon = L.divIcon({
         html: '<div style="font-size:32px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))">🏠</div>',

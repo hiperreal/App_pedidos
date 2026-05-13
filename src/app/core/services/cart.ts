@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CartItem, Order } from '../models/menu.model';
+import {
+  getFirestore, doc, setDoc, updateDoc, onSnapshot, Unsubscribe
+} from 'firebase/firestore';
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
   private readonly DELIVERY_FEE = 1.50;
   private orderCounter = 0;
+  private db = getFirestore();
 
   private cartSubject = new BehaviorSubject<CartItem[]>([]);
   cart$ = this.cartSubject.asObservable();
@@ -52,7 +56,17 @@ export class CartService {
       lng,
       deliveryLat: undefined,
       deliveryLng: undefined,
+      status: 'pending',
     };
+
+    // Guardar en Firestore
+    setDoc(doc(this.db, 'orders', String(order.id)), {
+      ...order,
+      deliveryLat: null,
+      deliveryLng: null,
+      status: 'pending',
+    }).catch(err => console.error('Error guardando orden:', err));
+
     const cur = this.ordersSubject.value;
     this.ordersSubject.next({ ...cur, pending: [...cur.pending, order] });
     this.clearCart();
@@ -68,6 +82,10 @@ export class CartService {
     const nextKey = next[from] as 'cooking' | 'sent';
     cur[nextKey] = [...cur[nextKey], order];
     this.ordersSubject.next({ ...cur });
+
+    // Actualizar estado en Firestore
+    updateDoc(doc(this.db, 'orders', String(id)), { status: nextKey })
+      .catch(err => console.error('Error actualizando estado:', err));
   }
 
   removeOrder(id: number, col: 'pending' | 'cooking' | 'sent'): void {
@@ -76,6 +94,7 @@ export class CartService {
     this.ordersSubject.next({ ...cur });
   }
 
+  // El repartidor actualiza su ubicación → se guarda en Firestore
   updateDeliveryLocation(id: number, lat: number, lng: number): void {
     const cur = { ...this.ordersSubject.value };
     const order = cur.sent.find(o => o.id === id);
@@ -84,5 +103,24 @@ export class CartService {
       order.deliveryLng = lng;
       this.ordersSubject.next({ ...cur });
     }
+
+    // Escribir en Firestore para que el cliente lo vea en tiempo real
+    updateDoc(doc(this.db, 'orders', String(id)), {
+      deliveryLat: lat,
+      deliveryLng: lng,
+    }).catch(err => console.error('Error actualizando ubicación:', err));
+  }
+
+  // El cliente escucha en tiempo real la ubicación del repartidor
+  listenToOrder(id: number, callback: (data: Partial<Order>) => void): Unsubscribe {
+    return onSnapshot(
+      doc(this.db, 'orders', String(id)),
+      (snap) => {
+        if (snap.exists()) {
+          callback(snap.data() as Partial<Order>);
+        }
+      },
+      (err) => console.error('Error escuchando orden:', err)
+    );
   }
 }

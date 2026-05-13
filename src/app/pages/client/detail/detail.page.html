@@ -17,7 +17,7 @@
     <div class="opt-row" *ngFor="let extra of item.extras; let i = index">
       <div class="opt-left">
         <div class="opt-name">{{ extra.name }}</div>
-        <div class="opt-price">+${{ extra.price | number:'1.2-2' }}</div>
+        <div class="opt-price">+₡{{ extra.price | number:'1.2-2' }}</div>
       </div>
       <div class="counter">
         <button class="ctr-btn" (click)="changeExtra(i, -1)">−</button>
@@ -56,6 +56,6 @@
 
 <ion-footer *ngIf="item">
   <button class="add-cart-btn" (click)="addToCart()">
-    Agregar al carrito — ${{ currentPrice | number:'1.2-2' }}
+    Agregar al carrito — ₡{{ currentPrice | number:'1.2-2' }}
   </button>
 </ion-footer>
