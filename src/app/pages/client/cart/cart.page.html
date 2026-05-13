@@ -19,7 +19,7 @@
         <div class="cart-item-name">{{ item.name }} — {{ item.variant }}</div>
         <div class="cart-item-extras">
           <span *ngIf="!item.extras.length">Sin extras</span>
-          <span *ngIf="item.extras.length">{{ item.extras[0].name }}</span>
+          <span *ngIf="item.extras.length">{{ extrasLabel(item) }}</span>
           <span *ngIf="item.notes"> · "{{ item.notes }}"</span>
         </div>
       </div>
@@ -31,6 +31,19 @@
       <div class="total-line"><span>Subtotal</span><span>${{ fmt(subtotal) }}</span></div>
       <div class="total-line"><span>Envío</span><span>${{ fmt(deliveryFee) }}</span></div>
       <div class="total-line big"><span>Total</span><span>${{ fmt(total) }}</span></div>
+    </div>
+
+    <!-- Dirección de entrega -->
+    <div class="address-section">
+      <div class="pay-title">📍 Dirección de entrega</div>
+      <button class="locate-btn" (click)="detectLocation()" [disabled]="locating">
+        <span *ngIf="!locating">📡 Detectar mi ubicación</span>
+        <span *ngIf="locating">⏳ Detectando...</span>
+      </button>
+      <div class="loc-error" *ngIf="locError">{{ locError }}</div>
+      <textarea class="address-input" rows="2" placeholder="O escribe tu dirección manualmente..." autocomplete="off"
+        [(ngModel)]="address">
+      </textarea>
     </div>
 
     <div class="pay-section">

@@ -1,0 +1,118 @@
+.admin-header {
+  background: #1e1e1e;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .header-left {
+    h3 { color: #fff; font-size: 16px; font-weight: 700; margin: 0; }
+    .header-sub { color: #888; font-size: 11px; margin: 0; }
+  }
+
+  .logout-btn {
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 6px 14px;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+  }
+}
+
+ion-content { --background: #121212; }
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  padding: 14px;
+
+  .metric-card {
+    background: #1e1e1e;
+    border-radius: 12px;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+
+    .metric-ico { font-size: 24px; margin-bottom: 6px; }
+    .metric-val { color: #fff; font-size: 18px; font-weight: 700; }
+    .metric-lbl { color: #888; font-size: 10px; margin-top: 4px; }
+
+    &.revenue { border-top: 3px solid #4CAF50; }
+    &.orders  { border-top: 3px solid #2196F3; }
+    &.pending { border-top: 3px solid #FF6B00; }
+    &.cooking { border-top: 3px solid #FFC107; }
+    &.sent    { border-top: 3px solid #9C27B0; }
+    &.kds     { border-top: 3px solid #ffc107; background: #2a2500; }
+  }
+}
+
+.section-title {
+  padding: 10px 16px 6px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.top-products {
+  margin: 0 14px;
+  background: #1e1e1e;
+  border-radius: 12px;
+  overflow: hidden;
+
+  .product-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-bottom: 1px solid #2a2a2a;
+    &:last-child { border-bottom: none; }
+
+    .product-rank  { color: #ffc107; font-size: 12px; font-weight: 700; width: 24px; }
+    .product-emoji { font-size: 20px; }
+    .product-name  { flex: 1; color: #fff; font-size: 12px; font-weight: 500; }
+    .product-count { color: #888; font-size: 11px; }
+  }
+}
+
+.orders-list {
+  margin: 0 14px 20px;
+  background: #1e1e1e;
+  border-radius: 12px;
+  overflow: hidden;
+
+  .order-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    border-bottom: 1px solid #2a2a2a;
+    &:last-child { border-bottom: none; }
+
+    .order-row-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      .order-num         { color: #fff; font-size: 13px; font-weight: 700; }
+      .order-items-count { color: #888; font-size: 11px; }
+      .order-address     { color: #4fc3f7; font-size: 10px; }
+    }
+
+    .order-row-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+      .order-pay   { color: #888; font-size: 11px; }
+      .order-total { color: #ffc107; font-size: 14px; font-weight: 700; }
+    }
+  }
+}
+
+.no-data {
+  text-align: center;
+  padding: 20px;
+  p { color: #555; font-size: 13px; }
+}

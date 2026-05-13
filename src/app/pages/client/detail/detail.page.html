@@ -6,8 +6,9 @@
 </ion-header>
 
 <ion-content *ngIf="item">
-  <div class="detail-hero" [style.background]="item.bg">
-    {{ item.emoji }}
+
+  <div class="detail-hero">
+    <img [src]="item.imageUrl" [alt]="item.name" />
   </div>
 
   <!-- Extras -->
@@ -50,6 +51,7 @@
       [(ngModel)]="notes">
     </textarea>
   </div>
+
 </ion-content>
 
 <ion-footer *ngIf="item">

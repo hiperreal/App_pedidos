@@ -39,6 +39,11 @@
         📝 {{ order.notes }}
       </div>
 
+      <!-- Dirección -->
+      <div class="order-address" *ngIf="order.address">
+        📍 {{ order.address }}
+      </div>
+
       <!-- Footer -->
       <div class="order-card-footer">
         <div class="order-pay">💳 {{ order.payMethod }}</div>

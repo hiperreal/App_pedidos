@@ -14,6 +14,7 @@ export class CartService {
     pending: Order[]; cooking: Order[]; sent: Order[];
   }>({ pending: [], cooking: [], sent: [] });
   orders$ = this.ordersSubject.asObservable();
+  getOrders() { return this.ordersSubject.value; }
 
   get cartItems(): CartItem[] { return this.cartSubject.value; }
   get cartCount(): number     { return this.cartItems.length; }
@@ -31,7 +32,7 @@ export class CartService {
 
   clearCart(): void { this.cartSubject.next([]); }
 
-  placeOrder(payMethod: string): string {
+  placeOrder(payMethod: string, address: string = '', lat: number = 0, lng: number = 0): string {
     if (!this.cartItems.length) return '';
     this.orderCounter++;
     const num = `#${String(this.orderCounter).padStart(3, '0')}`;
@@ -43,7 +44,14 @@ export class CartService {
         return s;
       }),
       notes: this.cartItems.filter(c => c.notes).map(c => c.notes).join('; '),
-      payMethod, total: this.total, time: 'ahora',
+      payMethod,
+      total: this.total,
+      time: new Date().toLocaleTimeString('es-CR', { hour: '2-digit', minute: '2-digit' }),
+      address,
+      lat,
+      lng,
+      deliveryLat: undefined,
+      deliveryLng: undefined,
     };
     const cur = this.ordersSubject.value;
     this.ordersSubject.next({ ...cur, pending: [...cur.pending, order] });
@@ -66,5 +74,15 @@ export class CartService {
     const cur = { ...this.ordersSubject.value };
     cur[col] = cur[col].filter(o => o.id !== id);
     this.ordersSubject.next({ ...cur });
+  }
+
+  updateDeliveryLocation(id: number, lat: number, lng: number): void {
+    const cur = { ...this.ordersSubject.value };
+    const order = cur.sent.find(o => o.id === id);
+    if (order) {
+      order.deliveryLat = lat;
+      order.deliveryLng = lng;
+      this.ordersSubject.next({ ...cur });
+    }
   }
 }

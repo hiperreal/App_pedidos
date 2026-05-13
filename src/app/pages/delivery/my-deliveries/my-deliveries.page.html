@@ -1,13 +1,90 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>my-deliveries</ion-title>
-  </ion-toolbar>
+<ion-header>
+  <div class="delivery-header">
+    <button class="back-btn" (click)="goBack()">←</button>
+    <div class="header-center">
+      <h3>Panel Repartidor</h3>
+      <p class="header-sub">🛵 BurgerHub Delivery</p>
+    </div>
+    <div class="online-toggle" (click)="toggleOnline()">
+      <div class="toggle-dot" [class.online]="isOnline"></div>
+      <span [style.color]="isOnline ? '#4CAF50' : '#888'">
+        {{ isOnline ? 'En turno' : 'Libre' }}
+      </span>
+    </div>
+  </div>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">my-deliveries</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+
+  <div class="empty-state" *ngIf="!orders.length">
+    <div class="empty-ico">🛵</div>
+    <p class="empty-title">Sin pedidos asignados</p>
+    <p class="empty-sub">Los pedidos listos aparecerán aquí</p>
+  </div>
+
+  <div class="deliveries-list" *ngIf="orders.length">
+    <div class="delivery-card" *ngFor="let order of orders">
+
+      <div class="card-header">
+        <span class="order-num">{{ order.num }}</span>
+        <span class="order-status" [style.color]="getStatusColor(order.deliveryStatus)">
+          {{ getStatusLabel(order.deliveryStatus) }}
+        </span>
+      </div>
+
+      <div class="card-items">
+        <div class="card-item" *ngFor="let item of order.items">• {{ item }}</div>
+      </div>
+
+      <div class="card-note" *ngIf="order.notes">📝 {{ order.notes }}</div>
+
+      <div class="card-address" *ngIf="order.address">
+        📍 <strong>Entregar en:</strong> {{ order.address }}
+      </div>
+
+      <div class="card-footer">
+        <span class="card-pay">{{ order.payMethod }}</span>
+        <span class="card-total">${{ order.total.toFixed(2) }}</span>
+      </div>
+
+      <div class="progress-track">
+        <div class="track-step" [class.done]="['sent','picking','onway','delivered'].indexOf(order.deliveryStatus) >= 0">
+          <div class="track-dot"></div>
+          <span>Listo</span>
+        </div>
+        <div class="track-line" [class.done]="['picking','onway','delivered'].indexOf(order.deliveryStatus) >= 0"></div>
+        <div class="track-step" [class.done]="['picking','onway','delivered'].indexOf(order.deliveryStatus) >= 0">
+          <div class="track-dot"></div>
+          <span>Recogido</span>
+        </div>
+        <div class="track-line" [class.done]="['onway','delivered'].indexOf(order.deliveryStatus) >= 0"></div>
+        <div class="track-step" [class.done]="['onway','delivered'].indexOf(order.deliveryStatus) >= 0">
+          <div class="track-dot"></div>
+          <span>En camino</span>
+        </div>
+        <div class="track-line" [class.done]="order.deliveryStatus === 'delivered'"></div>
+        <div class="track-step" [class.done]="order.deliveryStatus === 'delivered'">
+          <div class="track-dot"></div>
+          <span>Entregado</span>
+        </div>
+      </div>
+
+      <div class="map-container" *ngIf="order.deliveryStatus === 'onway'">
+        <div class="map-label">🗺 Ruta en tiempo real</div>
+        <div [id]="'map-' + order.id" class="map-box"></div>
+      </div>
+
+      <div class="card-actions" *ngIf="!isDelivered(order)">
+        <button class="btn-advance" (click)="advance(order)">
+          {{ getNextLabel(order.deliveryStatus) }}
+        </button>
+      </div>
+
+      <div class="delivered-badge" *ngIf="isDelivered(order)">
+        ✅ Pedido entregado exitosamente
+      </div>
+
+    </div>
+  </div>
+
 </ion-content>

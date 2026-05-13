@@ -150,3 +150,16 @@ ion-content {
   color: #000 !important;
   margin-bottom: 10px;
 }
+
+.item-thumb {
+  height: 120px;
+  overflow: hidden;
+  border-radius: 12px 12px 0 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
