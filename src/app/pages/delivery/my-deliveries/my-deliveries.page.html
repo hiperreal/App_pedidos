@@ -3,7 +3,7 @@
     <button class="back-btn" (click)="goBack()">←</button>
     <div class="header-center">
       <h3>Panel Repartidor</h3>
-      <p class="header-sub">🛵 La Central del Sabor Delivery</p>
+      <p class="header-sub">🛵 BurgerHub Delivery</p>
     </div>
     <div class="online-toggle" (click)="toggleOnline()">
       <div class="toggle-dot" [class.online]="isOnline"></div>
@@ -44,7 +44,7 @@
 
       <div class="card-footer">
         <span class="card-pay">{{ order.payMethod }}</span>
-        <span class="card-total">₡{{ order.total.toFixed(2) }}</span>
+        <span class="card-total">{{ order.total | currency:'CRC':'symbol':'1.0-0' }}</span>
       </div>
 
       <div class="progress-track">
@@ -69,9 +69,12 @@
         </div>
       </div>
 
-      <div class="map-container" *ngIf="order.deliveryStatus === 'onway'">
-        <div class="map-label">🗺 Ruta en tiempo real</div>
-        <div [id]="'map-' + order.id" class="map-box"></div>
+      <div class="card-actions" *ngIf="order.deliveryStatus === 'onway'">
+        <button class="btn-map"
+          (click)="toggleMap(order)"
+          [class.active]="activeMapId === order.id">
+          {{ activeMapId === order.id ? '🗺 Ocultar mapa' : '🗺 Ver ruta' }}
+        </button>
       </div>
 
       <div class="card-actions" *ngIf="!isDelivered(order)">
@@ -85,6 +88,12 @@
       </div>
 
     </div>
+  </div>
+
+  <!-- ✅ CAMBIADO: [style.display] en lugar de *ngIf — el div siempre existe en el DOM -->
+  <div class="map-section" [style.display]="activeMapId !== null ? 'block' : 'none'">
+    <div class="map-label">🗺 Ruta en tiempo real</div>
+    <div id="delivery-map" class="map-box"></div>
   </div>
 
 </ion-content>

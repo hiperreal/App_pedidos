@@ -45,15 +45,16 @@
         <div class="order-total">₡{{ order.total.toFixed(2) }}</div>
       </div>
 
-      <!-- Seguimiento GPS -->
+      <!-- ✅ Solo botón aquí, mapa se mueve fuera del *ngFor -->
       <div class="track-section" *ngIf="getStatusLabel(order).includes('camino')">
-        <button class="btn-track" (click)="trackOrder(order)" *ngIf="trackedOrder?.id !== order.id">
+        <button
+          class="btn-track"
+          (click)="trackOrder(order)"
+          *ngIf="trackedOrder?.id !== order.id">
           🗺 Ver ruta en tiempo real
         </button>
-        <div *ngIf="trackedOrder?.id === order.id">
-          <div class="eta-bar">⏱ ETA: {{ calcEta(order) }}</div>
-          <div id="client-map" class="client-map-box"></div>
-          <button class="btn-close-map" (click)="closeTracking()">Cerrar mapa</button>
+        <div class="tracking-badge" *ngIf="trackedOrder?.id === order.id">
+          📍 Viendo ruta en tiempo real ↓
         </div>
       </div>
 
@@ -90,6 +91,13 @@
       </div>
 
     </div>
+  </div>
+
+  <!-- ✅ MAPA FUERA del *ngFor y con [style.display] en lugar de *ngIf -->
+  <div class="map-wrapper" [style.display]="trackedOrder ? 'block' : 'none'">
+    <div class="eta-bar">⏱ ETA: {{ trackedOrder ? calcEta(trackedOrder) : '' }}</div>
+    <div id="client-map" class="client-map-box"></div>
+    <button class="btn-close-map" (click)="closeTracking()">Cerrar mapa</button>
   </div>
 
 </ion-content>

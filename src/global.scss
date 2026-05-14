@@ -61,3 +61,38 @@
   z-index: 2 !important;
   opacity: 1 !important;
 }
+/* Fix Leaflet zoom negro en Ionic */
+.leaflet-container {
+  background: #2a2a2a !important;
+  transform: translateZ(0) !important;
+}
+
+.leaflet-tile-container {
+  opacity: 1 !important;
+  transform: translateZ(0) !important;
+}
+
+.leaflet-tile {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateZ(0) !important;
+  will-change: auto !important;
+  image-rendering: auto !important;
+}
+
+.leaflet-zoom-animated {
+  will-change: auto !important;
+  transform: translateZ(0) !important;
+}
+
+.leaflet-pane,
+.leaflet-tile-pane,
+.leaflet-overlay-pane,
+.leaflet-marker-pane {
+  opacity: 1 !important;
+  z-index: 400 !important;
+}
+
+.leaflet-map-pane canvas {
+  opacity: 1 !important;
+}

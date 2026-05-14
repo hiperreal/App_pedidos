@@ -43,7 +43,7 @@
 
 @keyframes pulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  50%       { opacity: 0.5; }
 }
 
 ion-content { --background: #121212; }
@@ -153,28 +153,9 @@ ion-content { --background: #121212; }
     }
   }
 
-  .map-container {
-    margin-bottom: 14px;
-
-    .map-label {
-      color: #fff;
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .map-box {
-      width: 100%;
-      height: 280px;
-      border-radius: 12px;
-      overflow: visible !important;
-      border: 1px solid #333;
-      position: relative;
-      z-index: 1;
-    }
-  }
-
   .card-actions {
+    margin-bottom: 8px;
+
     .btn-advance {
       width: 100%;
       background: #ffc107;
@@ -200,39 +181,45 @@ ion-content { --background: #121212; }
   }
 }
 
-.leaflet-container {
-  background: #1a1a2e !important;
-  z-index: 1 !important;
-  border-radius: 12px;
+.btn-map {
+  width: 100%;
+  background: #1a2e3a;
+  border: 1px solid #2196F3;
+  border-radius: 10px;
+  padding: 12px;
+  color: #2196F3;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 8px;
+
+  &.active {
+    background: #2196F3;
+    color: #fff;
+  }
 }
 
-.leaflet-tile-pane {
-  opacity: 1 !important;
-  z-index: 2 !important;
-}
+.map-section {
+  margin: 0 14px 20px;
+  background: #1e1e1e;
+  border-radius: 14px;
+  padding: 14px;
 
-.leaflet-tile {
-  filter: none !important;
-  opacity: 1 !important;
-}
+  .map-label {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
 
-.leaflet-map-pane {
-  z-index: 2 !important;
-}
-
-.leaflet-overlay-pane {
-  z-index: 3 !important;
-}
-
-.leaflet-marker-pane {
-  z-index: 4 !important;
-}
-
-.leaflet-popup-pane {
-  z-index: 5 !important;
-}
-
-.map-box {
-  position: relative;
-  z-index: 1;
+  .map-box {
+    width: 100% !important;
+    height: 300px !important;
+    border-radius: 12px;
+    border: 1px solid #333;
+    display: block !important;
+    position: relative !important;
+    z-index: 1;
+    // ✅ overflow: hidden eliminado — causaba conflicto con tiles de Leaflet en Ionic
+  }
 }

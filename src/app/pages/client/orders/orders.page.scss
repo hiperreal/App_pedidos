@@ -17,7 +17,7 @@ ion-content { --background: #121212; }
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   padding: 80px 20px; gap: 10px;
-  .empty-ico  { font-size: 56px; }
+  .empty-ico   { font-size: 56px; }
   .empty-title { color: #fff; font-size: 16px; font-weight: 600; margin: 0; }
   .empty-sub   { color: #888; font-size: 13px; margin: 0; }
   .go-btn {
@@ -45,7 +45,7 @@ ion-content { --background: #121212; }
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
-    .order-num  { color: #fff; font-size: 14px; font-weight: 700; }
+    .order-num    { color: #fff; font-size: 14px; font-weight: 700; }
     .order-status { font-size: 12px; font-weight: 600; }
   }
 
@@ -60,11 +60,49 @@ ion-content { --background: #121212; }
     color: #ffc107; margin-bottom: 8px;
   }
 
+  .order-address {
+    background: #0a1e2e;
+    border: 1px solid #1565c0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 11px;
+    color: #4fc3f7;
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+
   .order-card-footer {
     display: flex; justify-content: space-between;
     align-items: center; margin-bottom: 14px;
     .order-pay   { color: #888; font-size: 11px; }
     .order-total { color: #ffc107; font-size: 15px; font-weight: 700; }
+  }
+
+  .track-section {
+    margin-bottom: 12px;
+
+    .btn-track {
+      width: 100%;
+      background: #1a2e3a;
+      border: 1px solid #2196F3;
+      border-radius: 10px;
+      padding: 12px;
+      color: #2196F3;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .tracking-badge {
+      text-align: center;
+      color: #ffc107;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px;
+      background: #1a1a00;
+      border: 1px solid #ffc107;
+      border-radius: 8px;
+    }
   }
 
   .progress-bar {
@@ -82,7 +120,7 @@ ion-content { --background: #121212; }
       }
       .step-label { font-size: 9px; color: #666; white-space: nowrap; }
 
-      &.active .step-dot { background: #ffc107; }
+      &.active .step-dot  { background: #ffc107; }
       &.active .step-label { color: #ffc107; }
     }
 
@@ -94,13 +132,40 @@ ion-content { --background: #121212; }
   }
 }
 
-.order-address {
-  background: #0a1e2e;
-  border: 1px solid #1565c0;
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 11px;
-  color: #4fc3f7;
-  margin-bottom: 10px;
-  line-height: 1.5;
+// ✅ Mapa fuera del *ngFor
+.map-wrapper {
+  margin: 0 14px 24px;
+  background: #1e1e1e;
+  border-radius: 14px;
+  padding: 14px;
+
+  .eta-bar {
+    color: #ffc107;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .client-map-box {
+    width: 100% !important;
+    height: 280px !important;
+    border-radius: 12px;
+    border: 1px solid #333;
+    display: block !important;
+    position: relative !important;
+    z-index: 1;
+  }
+
+  .btn-close-map {
+    width: 100%;
+    margin-top: 10px;
+    background: #2a2a2a;
+    border: 1px solid #555;
+    border-radius: 10px;
+    padding: 10px;
+    color: #aaa;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
 }

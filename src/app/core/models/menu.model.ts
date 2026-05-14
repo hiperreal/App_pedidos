@@ -29,6 +29,7 @@ export interface CartItem {
 
 export interface Order {
   id: number;
+  firestoreId?: string;
   num: string;
   items: string[];
   notes: string;
