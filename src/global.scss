@@ -12,6 +12,8 @@
 /* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";
 
+/* Leaflet CSS - Se importa desde angular.json para evitar duplicados */
+
 /* Basic CSS for apps built with Ionic */
 @import "@ionic/angular/css/normalize.css";
 @import "@ionic/angular/css/structure.css";
@@ -36,63 +38,94 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
 
+
+/* ════════════════════════════════════════════════════════════
+   FIX LEAFLET — mapa negro al hacer zoom en Ionic + Angular
+   ════════════════════════════════════════════════════════════
+
+   CAUSAS del negro:
+   1. fadeAnimation/zoomAnimation en Leaflet interfieren con el
+      Shadow DOM de ion-content
+   2. Las tiles quedan con opacity:0 durante transiciones CSS
+   3. ion-content tiene overflow:hidden que corta el tile pane
+   ════════════════════════════════════════════════════════════ */
+
+/* 1. Color de fondo mientras cargan las tiles (evita negro puro) */
 .leaflet-container {
-  background: #2a2a2a !important;
+  background: #e8e0d8 !important;
+  z-index: 1;
 }
 
-.leaflet-tile-container {
-  opacity: 1 !important;
-}
-
-.leaflet-tile {
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-.leaflet-zoom-animated {
-  will-change: auto !important;
-}
-
-.leaflet-pane {
-  z-index: 1 !important;
-}
-
+/* 2. GPU compositing — evita que las tiles desaparezcan en zoom */
 .leaflet-tile-pane {
-  z-index: 2 !important;
   opacity: 1 !important;
-}
-/* Fix Leaflet zoom negro en Ionic */
-.leaflet-container {
-  background: #2a2a2a !important;
-  transform: translateZ(0) !important;
+  transform: translate3d(0, 0, 0) !important;
+  will-change: transform;
 }
 
-.leaflet-tile-container {
-  opacity: 1 !important;
-  transform: translateZ(0) !important;
-}
-
+/* 3. Forzar visibilidad de cada tile individualmente */
 .leaflet-tile {
-  opacity: 1 !important;
+  opacity:    1 !important;
+  display:    block !important;
   visibility: visible !important;
-  transform: translateZ(0) !important;
-  will-change: auto !important;
-  image-rendering: auto !important;
+  transform:  translate3d(0, 0, 0) !important;
+  /* Evita que Ionic aplique transiciones CSS a las tiles */
+  transition: none !important;
 }
 
+/* 4. Contenedor de tiles — sin transiciones */
+.leaflet-tile-container {
+  opacity:    1 !important;
+  transform:  translate3d(0, 0, 0) !important;
+  transition: none !important;
+}
+
+/* 5. Durante zoom: mantener tiles visibles */
 .leaflet-zoom-animated {
   will-change: auto !important;
-  transform: translateZ(0) !important;
+}
+
+/* 6. Todos los panes con z-index correcto */
+.leaflet-pane             { z-index: 400 !important; }
+.leaflet-tile-pane        { z-index: 200 !important; }
+.leaflet-overlay-pane     { z-index: 400 !important; }
+.leaflet-marker-pane      { z-index: 600 !important; }
+.leaflet-popup-pane       { z-index: 700 !important; }
+
+/* 7. ✅ FIX CLAVE: permitir scroll normal y solo sobreescribir Leaflet dentro del contenido */
+ion-content::part(scroll) {
+  overflow: auto !important;
+}
+
+ion-content::part(scroll) .leaflet-container,
+ion-content .leaflet-container {
+  overflow: visible !important;
+}
+
+.leaflet-container {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* 8. Popups y controles sobre Ionic */
+.leaflet-control-container { z-index: 800 !important; }
+.leaflet-popup             { z-index: 900 !important; }
+
+// ===== FIX LEAFLET EN IONIC =====
+ion-content {
+  --overflow: auto;
 }
 
 .leaflet-pane,
-.leaflet-tile-pane,
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-tile-container,
 .leaflet-overlay-pane,
-.leaflet-marker-pane {
-  opacity: 1 !important;
-  z-index: 400 !important;
-}
-
+.leaflet-shadow-pane,
+.leaflet-marker-pane,
+.leaflet-popup-pane,
+.leaflet-map-pane svg,
 .leaflet-map-pane canvas {
-  opacity: 1 !important;
+  z-index: auto !important;
 }

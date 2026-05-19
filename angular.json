@@ -33,7 +33,6 @@
             ],
             "styles": [
               "src/global.scss",
-              "src/theme/variables.scss",
               "node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": []
@@ -117,7 +116,6 @@
             ],
             "styles": [
               "src/global.scss",
-              "src/theme/variables.scss",
               "node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": []

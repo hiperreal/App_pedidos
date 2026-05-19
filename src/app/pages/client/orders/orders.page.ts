@@ -25,13 +25,19 @@ export class OrdersPage implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private cartService: CartService,
-    private cdr: ChangeDetectorRef   // ← NUEVO
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.sub = this.cartService.orders$.subscribe(data => {
       this.orders = [...data.pending, ...data.cooking, ...data.sent];
     });
+  }
+
+  ionViewDidLeave(): void {
+    this.stopFirestoreListener();
+    this.destroyMap();
+    this.trackedOrder = null;
   }
 
   ngOnDestroy(): void {
@@ -57,33 +63,37 @@ export class OrdersPage implements OnInit, OnDestroy {
     this.routeLine = null;
   }
 
+  private waitForMapContainer(id: string, timeout = 2500): Promise<HTMLElement | null> {
+    const start = performance.now();
+    return new Promise(resolve => {
+      const check = () => {
+        const el = document.getElementById(id);
+        if (el && el.offsetWidth > 0 && el.offsetHeight > 0) {
+          resolve(el);
+          return;
+        }
+        if (performance.now() - start > timeout) {
+          resolve(el);
+          return;
+        }
+        requestAnimationFrame(check);
+      };
+      check();
+    });
+  }
+
   trackOrder(order: Order): void {
     this.stopFirestoreListener();
     this.destroyMap();
     this.trackedOrder = order;
-
-    // Forzar render del div antes de inicializar Leaflet
     this.cdr.detectChanges();
 
-    // Esperar dimensiones reales con ResizeObserver
-    const el = document.getElementById('client-map');
-    if (!el) return;
-
-    const observer = new ResizeObserver(() => {
-      if (el.offsetWidth > 0 && el.offsetHeight > 0) {
-        observer.disconnect();
-        this.initMap(order);
+    this.waitForMapContainer('client-map').then(el => {
+      if (el && this.trackedOrder?.id === order.id) {
+        this.initMap(order, el);
       }
     });
-    observer.observe(el);
 
-    // Fallback por si ResizeObserver no dispara
-    setTimeout(() => {
-      observer.disconnect();
-      if (!this.map) this.initMap(order);
-    }, 800);
-
-    // Escuchar Firestore en tiempo real para ubicación del repartidor
     this.firestoreSub = this.cartService.listenToOrder(order.id, (data) => {
       if (this.trackedOrder && data.deliveryLat && data.deliveryLng) {
         this.trackedOrder = { ...this.trackedOrder, ...data };
@@ -98,16 +108,15 @@ export class OrdersPage implements OnInit, OnDestroy {
     this.destroyMap();
   }
 
-  initMap(order: Order): void {
+  initMap(order: Order, el: HTMLElement): void {
     this.destroyMap();
-
-    const el = document.getElementById('client-map');
-    if (!el) return;
 
     el.innerHTML = '';
     el.style.height = '280px';
     el.style.width = '100%';
     el.style.display = 'block';
+    el.style.position = 'relative';
+    el.style.zIndex = '0';
 
     const lat = order.lat || 9.9281;
     const lng = order.lng || -84.0907;
@@ -115,26 +124,31 @@ export class OrdersPage implements OnInit, OnDestroy {
     this.map = L.map(el, {
       zoomControl: true,
       preferCanvas: false,
+      fadeAnimation: false,
+      markerZoomAnimation: false,
     }).setView([lat, lng], 14);
 
-    const map = this.map;   // ← declarar inmediatamente
+    const map = this.map;
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap',
       maxZoom: 19,
       keepBuffer: 4,
+      updateWhenIdle: false,
+      updateWhenZooming: false,
     }).addTo(map);
 
-    // Dos invalidateSize + setView para forzar carga de tiles completa
-    setTimeout(() => {
-      map.invalidateSize(true);
-      map.setView(map.getCenter(), map.getZoom(), { animate: false });
-    }, 150);
+    map.whenReady(() => {
+      setTimeout(() => {
+        map.invalidateSize(true);
+        map.setView([lat, lng], 14);
+      }, 200);
+    });
 
     setTimeout(() => {
       map.invalidateSize(true);
-      map.setView(map.getCenter(), map.getZoom(), { animate: false });
-    }, 500);
+      map.setView([lat, lng], 14);
+    }, 700);
 
     const clientIcon = L.divIcon({
       html: '<div style="font-size:28px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))">🏠</div>',

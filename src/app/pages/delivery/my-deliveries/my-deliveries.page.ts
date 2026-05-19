@@ -29,7 +29,7 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
     private router: Router,
     private cartService: CartService,
     private cdr: ChangeDetectorRef
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.sub = this.cartService.orders$.subscribe(data => {
@@ -39,6 +39,11 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
         deliveryStatus: existing.get(o.id) ?? 'sent'
       }));
     });
+  }
+
+  ionViewDidLeave(): void {
+    this.destroyMap();
+    this.activeMapId = null;
   }
 
   ngOnDestroy(): void {
@@ -57,7 +62,26 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
     }
   }
 
-  toggleMap(order: DeliveryOrder): void {
+  private waitForMapContainer(id: string, timeout = 2500): Promise<HTMLElement | null> {
+    const start = performance.now();
+    return new Promise(resolve => {
+      const check = () => {
+        const el = document.getElementById(id);
+        if (el && el.offsetWidth > 0 && el.offsetHeight > 0) {
+          resolve(el);
+          return;
+        }
+        if (performance.now() - start > timeout) {
+          resolve(el);
+          return;
+        }
+        requestAnimationFrame(check);
+      };
+      check();
+    });
+  }
+
+  async toggleMap(order: DeliveryOrder): Promise<void> {
     if (this.activeMapId === order.id) {
       this.activeMapId = null;
       this.destroyMap();
@@ -66,24 +90,23 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
 
     this.destroyMap();
     this.activeMapId = order.id;
-
-    // Forzar render del div antes de inicializar Leaflet
     this.cdr.detectChanges();
 
-    setTimeout(() => this.initMap(order), 300);
-  }
-
-  initMap(order: DeliveryOrder): void {
-    const el = document.getElementById('delivery-map');
-    if (!el) {
-      console.warn('delivery-map div not found');
+    const el = await this.waitForMapContainer('delivery-map');
+    if (!el || this.activeMapId !== order.id) {
       return;
     }
 
+    this.initMap(order, el);
+  }
+
+  initMap(order: DeliveryOrder, el: HTMLElement): void {
     el.innerHTML = '';
     el.style.height = '300px';
     el.style.width = '100%';
     el.style.display = 'block';
+    el.style.position = 'relative';
+    el.style.zIndex = '0';
 
     const clientLat = (order.lat && order.lat !== 0) ? order.lat : 9.9281;
     const clientLng = (order.lng && order.lng !== 0) ? order.lng : -84.0907;
@@ -91,8 +114,8 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
     this.map = L.map(el, {
       zoomControl: true,
       preferCanvas: false,
-      fadeAnimation: true,
-      zoomAnimation: true,
+      fadeAnimation: false,
+      markerZoomAnimation: false,
     }).setView([clientLat, clientLng], 15);
 
     const map = this.map;
@@ -101,18 +124,21 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
       attribution: '© OpenStreetMap',
       maxZoom: 19,
       keepBuffer: 4,
+      updateWhenIdle: false,
+      updateWhenZooming: false,
     }).addTo(map);
 
-    // Dentro de initMap(), después de L.tileLayer(...).addTo(map):
-    setTimeout(() => {
-      map.invalidateSize(true);
-      map.setView(map.getCenter(), map.getZoom(), { animate: false });
-    }, 150);
+    map.whenReady(() => {
+      setTimeout(() => {
+        map.invalidateSize(true);
+        map.setView([clientLat, clientLng], 15);
+      }, 200);
+    });
 
     setTimeout(() => {
       map.invalidateSize(true);
-      map.setView(map.getCenter(), map.getZoom(), { animate: false });
-    }, 500);
+      map.setView([clientLat, clientLng], 15);
+    }, 700);
 
     const clientIcon = L.divIcon({
       html: '<div style="font-size:32px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))">🏠</div>',
@@ -193,7 +219,7 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
           );
         }
       },
-      () => { },
+      () => {},
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 5000 }
     );
   }
@@ -249,11 +275,7 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
     return order.deliveryStatus === 'delivered';
   }
 
-  toggleOnline(): void {
-    this.isOnline = !this.isOnline;
-  }
+  toggleOnline(): void { this.isOnline = !this.isOnline; }
 
-  goBack(): void {
-    this.router.navigate(['/login']);
-  }
+  goBack(): void { this.router.navigate(['/login']); }
 }
