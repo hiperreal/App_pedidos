@@ -120,9 +120,10 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
 
     const map = this.map;
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap',
       maxZoom: 19,
+      crossOrigin: true,
       keepBuffer: 4,
       updateWhenIdle: false,
       updateWhenZooming: false,
