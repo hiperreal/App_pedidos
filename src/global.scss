@@ -1,131 +1,48 @@
 /*
  * App Global CSS
- * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
  */
 
-/* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";
-
-/* Leaflet CSS - Se importa desde angular.json para evitar duplicados */
-
-/* Basic CSS for apps built with Ionic */
 @import "@ionic/angular/css/normalize.css";
 @import "@ionic/angular/css/structure.css";
 @import "@ionic/angular/css/typography.css";
 @import "@ionic/angular/css/display.css";
-
-/* Optional CSS utils that can be commented out */
 @import "@ionic/angular/css/padding.css";
 @import "@ionic/angular/css/float-elements.css";
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
-
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
-
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
 
+/* MapLibre GL */
+@import 'maplibre-gl/dist/maplibre-gl.css';
 
-/* ════════════════════════════════════════════════════════════
-   FIX LEAFLET — mapa negro al hacer zoom en Ionic + Angular
-   ════════════════════════════════════════════════════════════
-
-   CAUSAS del negro:
-   1. fadeAnimation/zoomAnimation en Leaflet interfieren con el
-      Shadow DOM de ion-content
-   2. Las tiles quedan con opacity:0 durante transiciones CSS
-   3. ion-content tiene overflow:hidden que corta el tile pane
-   ════════════════════════════════════════════════════════════ */
-
-/* 1. Color de fondo mientras cargan las tiles (evita negro puro) */
-.leaflet-container {
-  background: #e8e0d8 !important;
-  z-index: 1;
-}
-
-/* 2. GPU compositing — evita que las tiles desaparezcan en zoom */
-.leaflet-tile-pane {
-  opacity: 1 !important;
-  transform: translate3d(0, 0, 0) !important;
-  will-change: transform;
-}
-
-/* 3. Forzar visibilidad de cada tile individualmente */
-.leaflet-tile {
-  opacity:    1 !important;
-  display:    block !important;
-  visibility: visible !important;
-  transform:  translate3d(0, 0, 0) !important;
-  /* Evita que Ionic aplique transiciones CSS a las tiles */
-  transition: none !important;
-}
-
-/* 4. Contenedor de tiles — sin transiciones */
-.leaflet-tile-container {
-  opacity:    1 !important;
-  transform:  translate3d(0, 0, 0) !important;
-  transition: none !important;
-}
-
-/* 5. Durante zoom: mantener tiles visibles */
-.leaflet-zoom-animated {
-  will-change: auto !important;
-}
-
-/* 6. Todos los panes con z-index correcto */
-.leaflet-pane             { z-index: 400 !important; }
-.leaflet-tile-pane        { z-index: 200 !important; }
-.leaflet-overlay-pane     { z-index: 400 !important; }
-.leaflet-marker-pane      { z-index: 600 !important; }
-.leaflet-popup-pane       { z-index: 700 !important; }
-
-/* 7. ✅ FIX CLAVE: permitir scroll normal y solo sobreescribir Leaflet dentro del contenido */
-ion-content::part(scroll) {
-  overflow: auto !important;
-}
-
-ion-content::part(scroll) .leaflet-container,
-ion-content .leaflet-container {
-  overflow: visible !important;
-}
-
-.leaflet-container {
-  position: relative !important;
+/* MapLibre fix para Ionic */
+.maplibregl-map {
   width: 100% !important;
   height: 100% !important;
+  position: relative !important;
 }
 
-/* 8. Popups y controles sobre Ionic */
-.leaflet-control-container { z-index: 800 !important; }
-.leaflet-popup             { z-index: 900 !important; }
+.maplibregl-canvas {
+  outline: none;
+}
 
-// ===== FIX LEAFLET EN IONIC =====
 ion-content {
   --overflow: auto;
 }
 
-.leaflet-pane,
-.leaflet-tile,
-.leaflet-marker-icon,
-.leaflet-tile-container,
-.leaflet-overlay-pane,
-.leaflet-shadow-pane,
-.leaflet-marker-pane,
-.leaflet-popup-pane,
-.leaflet-map-pane svg,
-.leaflet-map-pane canvas {
-  z-index: auto !important;
+/* Leaflet fixes (por si acaso) */
+.leaflet-container {
+  background: #e8e0d8 !important;
+  z-index: 1;
 }
+.leaflet-tile-pane { opacity: 1 !important; transform: translate3d(0,0,0) !important; }
+.leaflet-tile { opacity: 1 !important; display: block !important; visibility: visible !important; transition: none !important; }
+.leaflet-tile-container { opacity: 1 !important; transition: none !important; }
+.leaflet-pane { z-index: 400 !important; }
+.leaflet-tile-pane { z-index: 200 !important; }
+.leaflet-marker-pane { z-index: 600 !important; }
+.leaflet-popup-pane { z-index: 700 !important; }
+.leaflet-control-container { z-index: 800 !important; }
+.leaflet-popup { z-index: 900 !important; }

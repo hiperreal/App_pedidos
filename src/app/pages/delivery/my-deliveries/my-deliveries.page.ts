@@ -67,14 +67,8 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
     return new Promise(resolve => {
       const check = () => {
         const el = document.getElementById(id);
-        if (el && el.offsetWidth > 0 && el.offsetHeight > 0) {
-          resolve(el);
-          return;
-        }
-        if (performance.now() - start > timeout) {
-          resolve(el);
-          return;
-        }
+        if (el && el.offsetWidth > 0 && el.offsetHeight > 0) { resolve(el); return; }
+        if (performance.now() - start > timeout) { resolve(el); return; }
         requestAnimationFrame(check);
       };
       check();
@@ -87,16 +81,11 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
       this.destroyMap();
       return;
     }
-
     this.destroyMap();
     this.activeMapId = order.id;
     this.cdr.detectChanges();
-
     const el = await this.waitForMapContainer('delivery-map');
-    if (!el || this.activeMapId !== order.id) {
-      return;
-    }
-
+    if (!el || this.activeMapId !== order.id) return;
     this.initMap(order, el);
   }
 
@@ -120,32 +109,17 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
 
     const map = this.map;
 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap',
-      maxZoom: 19,
-      crossOrigin: true,
-      keepBuffer: 4,
-      updateWhenIdle: false,
-      updateWhenZooming: false,
+    L.tileLayer('https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png?api_key=5bd3a1fd-1e09-4ccb-89c5-037a443dd2da', {
+      attribution: '© Stadia Maps © OpenStreetMap',
+      maxZoom: 20,
     }).addTo(map);
 
-    map.whenReady(() => {
-      setTimeout(() => {
-        map.invalidateSize(true);
-        map.setView([clientLat, clientLng], 15);
-      }, 200);
-    });
-
-    setTimeout(() => {
-      map.invalidateSize(true);
-      map.setView([clientLat, clientLng], 15);
-    }, 700);
+    map.whenReady(() => { setTimeout(() => { map.invalidateSize(true); map.setView([clientLat, clientLng], 15); }, 200); });
+    setTimeout(() => { map.invalidateSize(true); map.setView([clientLat, clientLng], 15); }, 700);
 
     const clientIcon = L.divIcon({
       html: '<div style="font-size:32px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))">🏠</div>',
-      className: '',
-      iconSize: [36, 36],
-      iconAnchor: [18, 36],
+      className: '', iconSize: [36, 36], iconAnchor: [18, 36],
     });
 
     L.marker([clientLat, clientLng], { icon: clientIcon })
@@ -159,16 +133,13 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
   startTracking(order: DeliveryOrder): void {
     if (!navigator.geolocation || !this.map) return;
     const map = this.map;
-
     let deliveryMarker: L.Marker | null = null;
     let routeLine: L.Polyline | null = null;
     let etaControl: L.Control | null = null;
 
     const deliveryIcon = L.divIcon({
       html: '<div style="font-size:32px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))">🛵</div>',
-      className: '',
-      iconSize: [36, 36],
-      iconAnchor: [18, 36],
+      className: '', iconSize: [36, 36], iconAnchor: [18, 36],
     });
 
     const clientLat = (order.lat && order.lat !== 0) ? order.lat : 0;
@@ -178,46 +149,26 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
       async (pos) => {
         const dLat = pos.coords.latitude;
         const dLng = pos.coords.longitude;
-
         this.cartService.updateDeliveryLocation(order.id, dLat, dLng);
-
         if (!deliveryMarker) {
-          deliveryMarker = L.marker([dLat, dLng], { icon: deliveryIcon })
-            .addTo(map)
-            .bindPopup('🛵 Tu ubicación');
-        } else {
-          deliveryMarker.setLatLng([dLat, dLng]);
-        }
-
+          deliveryMarker = L.marker([dLat, dLng], { icon: deliveryIcon }).addTo(map).bindPopup('🛵 Tu ubicación');
+        } else { deliveryMarker.setLatLng([dLat, dLng]); }
         if (clientLat !== 0 && clientLng !== 0) {
           if (routeLine) map.removeLayer(routeLine);
-          routeLine = L.polyline(
-            [[dLat, dLng], [clientLat, clientLng]],
-            { color: '#ffc107', weight: 4, dashArray: '8,8' }
-          ).addTo(map);
-
+          routeLine = L.polyline([[dLat, dLng], [clientLat, clientLng]], { color: '#ffc107', weight: 4, dashArray: '8,8' }).addTo(map);
           const dist = this.calcDistance(dLat, dLng, clientLat, clientLng);
           const etaMin = Math.ceil((dist / 30) * 60);
-
           if (etaControl) map.removeControl(etaControl);
           const EtaControl = L.Control.extend({
             onAdd: () => {
               const div = L.DomUtil.create('div');
-              div.innerHTML = `
-                <div style="background:#1e1e1e;border:2px solid #ffc107;border-radius:10px;
-                            padding:8px 14px;color:#fff;font-size:13px;font-weight:600;">
-                  ⏱ ETA: ~${etaMin} min &nbsp;·&nbsp; ${dist.toFixed(1)} km
-                </div>`;
+              div.innerHTML = `<div style="background:#1e1e1e;border:2px solid #ffc107;border-radius:10px;padding:8px 14px;color:#fff;font-size:13px;font-weight:600;">⏱ ETA: ~${etaMin} min &nbsp;·&nbsp; ${dist.toFixed(1)} km</div>`;
               return div;
             }
           });
           etaControl = new EtaControl({ position: 'bottomleft' });
           etaControl.addTo(map);
-
-          map.fitBounds(
-            [[dLat, dLng], [clientLat, clientLng]],
-            { padding: [50, 50] }
-          );
+          map.fitBounds([[dLat, dLng], [clientLat, clientLng]], { padding: [50, 50] });
         }
       },
       () => {},
@@ -229,11 +180,8 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
     const R = 6371;
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLng = (lng2 - lng1) * Math.PI / 180;
-    const a =
-      Math.sin(dLat / 2) ** 2 +
-      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-      Math.sin(dLng / 2) ** 2;
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   }
 
   advance(order: DeliveryOrder): void {
@@ -243,40 +191,18 @@ export class MyDeliveriesPage implements OnInit, OnDestroy {
   }
 
   getStatusLabel(status: DeliveryStatus): string {
-    const labels: Record<DeliveryStatus, string> = {
-      sent: '📦 Listo para recoger',
-      picking: '🛵 Recogiendo pedido',
-      onway: '🚀 En camino',
-      delivered: '✅ Entregado',
-    };
-    return labels[status];
+    return { sent: '📦 Listo para recoger', picking: '🛵 Recogiendo pedido', onway: '🚀 En camino', delivered: '✅ Entregado' }[status];
   }
 
   getNextLabel(status: DeliveryStatus): string {
-    const labels: Record<DeliveryStatus, string> = {
-      sent: 'Recoger pedido',
-      picking: 'Salir a entregar',
-      onway: 'Marcar entregado',
-      delivered: 'Entregado',
-    };
-    return labels[status];
+    return { sent: 'Recoger pedido', picking: 'Salir a entregar', onway: 'Marcar entregado', delivered: 'Entregado' }[status];
   }
 
   getStatusColor(status: DeliveryStatus): string {
-    const colors: Record<DeliveryStatus, string> = {
-      sent: '#FF6B00',
-      picking: '#FFC107',
-      onway: '#2196F3',
-      delivered: '#4CAF50',
-    };
-    return colors[status];
+    return { sent: '#FF6B00', picking: '#FFC107', onway: '#2196F3', delivered: '#4CAF50' }[status];
   }
 
-  isDelivered(order: DeliveryOrder): boolean {
-    return order.deliveryStatus === 'delivered';
-  }
-
+  isDelivered(order: DeliveryOrder): boolean { return order.deliveryStatus === 'delivered'; }
   toggleOnline(): void { this.isOnline = !this.isOnline; }
-
   goBack(): void { this.router.navigate(['/login']); }
 }
