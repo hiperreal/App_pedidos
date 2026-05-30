@@ -4,13 +4,14 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signInWithPopup,
+  signInWithCredential,
   GoogleAuthProvider,
   signOut,
   onAuthStateChanged,
   User
 } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 
 export interface UserProfile {
   uid: string;
@@ -30,7 +31,6 @@ export class AuthService {
     onAuthStateChanged(this.auth, async (user) => {
       if (user) {
         this.currentUser = await this.getUserProfile(user.uid);
-        // Solo redirige si fue un login explícito, no al restaurar sesión
         if (this.explicitLogin) {
           this.explicitLogin = false;
           this.redirectByRole(this.currentUser?.role);
@@ -58,8 +58,11 @@ export class AuthService {
 
   async loginWithGoogle(): Promise<void> {
     this.explicitLogin = true;
-    const provider = new GoogleAuthProvider();
-    const cred = await signInWithPopup(this.auth, provider);
+    const googleUser = await GoogleAuth.signIn();
+    const credential = GoogleAuthProvider.credential(
+      googleUser.authentication.idToken
+    );
+    const cred = await signInWithCredential(this.auth, credential);
     const existing = await this.getUserProfile(cred.user.uid);
     if (!existing) {
       const profile: UserProfile = {

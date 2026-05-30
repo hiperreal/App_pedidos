@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "413328046854",
+    "project_id": "app-comiida",
+    "storage_bucket": "app-comiida.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:413328046854:android:0ee13716fead1536603c87",
+        "android_client_info": {
+          "package_name": "io.ionic.starter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "413328046854-lcgr45kki9rc89hrp6dl0skebk38gggv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.ionic.starter",
+            "certificate_hash": "6a1b6cc90e71cdba244d8466e26399629516ba73"
+          }
+        },
+        {
+          "client_id": "413328046854-s5f9rkffteev8g42rl516sb43fp71klt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYPuOHVBtAajezYKgoAooZFFyGo9UYGpU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "413328046854-s5f9rkffteev8g42rl516sb43fp71klt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

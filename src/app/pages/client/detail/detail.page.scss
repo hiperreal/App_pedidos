@@ -1,12 +1,12 @@
 .detail-top {
   background: #1e1e1e;
-  padding: 10px 14px 14px;
+  padding: calc(var(--ion-safe-area-top, 0px) + 10px) 14px 14px;
 
   .back-btn {
     background: none;
     border: none;
     color: rgba(255,255,255,.85);
-    font-size: 12px;
+    font-size: 13px;
     cursor: pointer;
     padding: 0;
     margin-bottom: 4px;
@@ -15,7 +15,7 @@
 
   h3 {
     color: #fff;
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 600;
     margin: 0;
   }
@@ -34,9 +34,7 @@
   }
 }
 
-ion-content {
-  --background: #121212;
-}
+ion-content { --background: #121212; }
 
 .opt-card {
   background: #1e1e1e;
@@ -45,7 +43,7 @@ ion-content {
   padding: 12px 14px;
 
   .opt-card-title {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
     color: #fff;
     margin-bottom: 10px;
@@ -59,8 +57,8 @@ ion-content {
     &:last-child { margin-bottom: 0; }
 
     .opt-left {
-      .opt-name  { font-size: 12px; color: #ccc; }
-      .opt-price { font-size: 11px; color: #ffc107; margin-top: 2px; }
+      .opt-name  { font-size: 14px; color: #ccc; }
+      .opt-price { font-size: 13px; color: #ffc107; margin-top: 2px; }
     }
 
     .counter {
@@ -69,13 +67,13 @@ ion-content {
       gap: 8px;
 
       .ctr-btn {
-        width: 26px;
-        height: 26px;
+        width: 30px;
+        height: 30px;
         border-radius: 50%;
         background: #ffc107;
         color: #000;
         border: none;
-        font-size: 16px;
+        font-size: 18px;
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -85,7 +83,7 @@ ion-content {
       }
 
       .ctr-val {
-        font-size: 13px;
+        font-size: 14px;
         font-weight: 600;
         color: #fff;
         min-width: 16px;
@@ -103,8 +101,8 @@ ion-content {
   .var-btn {
     border: 1px solid #333;
     border-radius: 8px;
-    padding: 5px 12px;
-    font-size: 11px;
+    padding: 6px 14px;
+    font-size: 13px;
     color: #888;
     background: #2a2a2a;
     cursor: pointer;
@@ -122,7 +120,7 @@ ion-content {
   border: 1px solid #333;
   border-radius: 8px;
   padding: 8px 10px;
-  font-size: 12px;
+  font-size: 13px;
   color: #fff;
   resize: none;
   background: #2a2a2a;
@@ -142,7 +140,7 @@ ion-footer {
     border: none;
     border-radius: 12px;
     padding: 14px;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     cursor: pointer;
   }

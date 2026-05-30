@@ -4,7 +4,7 @@ $dark-bg: #121212;
 $card-bg: #1e1e1e;
 
 .home-header {
-  padding: 20px 16px 10px;
+  padding: calc(env(safe-area-inset-top) + 12px) 16px 10px;
   background: $dark-bg;
   color: white;
 
@@ -74,23 +74,18 @@ $card-bg: #1e1e1e;
 ion-content {
   --background: #{$dark-bg};
 
-  .sec-title { padding: 10px 16px; color: white; font-weight: bold; }
+  .sec-title { padding: 10px 16px; color: white; font-weight: bold; font-size: 17px; }
 
-  // GRID RESPONSIVE
   .items-grid {
     display: grid;
     gap: 15px;
     padding: 0 16px 20px;
-
-    // Configuración por defecto (Móvil: 2 columnas)
     grid-template-columns: repeat(2, 1fr);
 
-    // Tablet: 3 columnas
     @media (min-width: 768px) {
       grid-template-columns: repeat(3, 1fr);
     }
 
-    // Pantalla Grande: 4 o 5 columnas
     @media (min-width: 1200px) {
       grid-template-columns: repeat(5, 1fr);
     }
@@ -111,21 +106,22 @@ ion-content {
 
       .item-info {
         padding: 12px;
-        .item-name { color: white; font-weight: 600; font-size: 15px; }
+        .item-name { color: white; font-weight: 600; font-size: 17px; }
         
         .price-row {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-top: 8px;
-          .item-price { color: $primary; font-weight: 700; }
+          .item-price { color: $primary; font-weight: 700; font-size: 17px; }
           .item-add {
             background: $primary;
             border: none;
-            width: 28px;
-            height: 28px;
+            width: 34px;
+            height: 34px;
             border-radius: 8px;
             font-weight: bold;
+            font-size: 18px;
           }
         }
       }

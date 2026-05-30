@@ -18,7 +18,6 @@ import {
 @Injectable({ providedIn: 'root' })
 export class CartService {
   private readonly DELIVERY_FEE = 1.50;
-  private orderCounter = 0;
   private db = getFirestore();
 
   private cartSubject = new BehaviorSubject<CartItem[]>([]);
@@ -33,7 +32,6 @@ export class CartService {
     this.listenFirestore();
   }
 
-  // Escucha Firestore en tiempo real — sincroniza entre dispositivos
   private listenFirestore(): void {
     const q = query(
       collection(this.db, 'orders'),
@@ -99,9 +97,11 @@ export class CartService {
   ): Promise<string> {
     if (!this.cartItems.length) return '';
 
-    this.orderCounter++;
-    const id  = Date.now();
-    const num = `#${String(this.orderCounter).padStart(3, '0')}`;
+    const id = Date.now();
+
+    const allOrders = this.ordersSubject.value;
+    const totalCount = allOrders.pending.length + allOrders.cooking.length + allOrders.sent.length;
+    const num = `#${String(totalCount + 1).padStart(3, '0')}`;
 
     const items = this.cartItems.map(c => {
       let s = `${c.emoji} ${c.name} (${c.variant})`;

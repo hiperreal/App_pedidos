@@ -1,6 +1,6 @@
 .orders-header {
   background: #1e1e1e;
-  padding: 14px 16px;
+  padding: calc(var(--ion-safe-area-top, 0px) + 14px) 16px 14px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -8,7 +8,7 @@
     background: none; border: none; color: #fff;
     font-size: 20px; cursor: pointer;
   }
-  h3 { color: #fff; font-size: 16px; font-weight: 600; margin: 0; }
+  h3 { color: #fff; font-size: 18px; font-weight: 600; margin: 0; }
 }
 
 ion-content { --background: #121212; }
@@ -18,12 +18,12 @@ ion-content { --background: #121212; }
   align-items: center; justify-content: center;
   padding: 80px 20px; gap: 10px;
   .empty-ico   { font-size: 56px; }
-  .empty-title { color: #fff; font-size: 16px; font-weight: 600; margin: 0; }
-  .empty-sub   { color: #888; font-size: 13px; margin: 0; }
+  .empty-title { color: #fff; font-size: 17px; font-weight: 600; margin: 0; }
+  .empty-sub   { color: #888; font-size: 14px; margin: 0; }
   .go-btn {
     margin-top: 14px; background: #ffc107; color: #000;
     border: none; border-radius: 10px; padding: 12px 28px;
-    font-size: 13px; font-weight: 600; cursor: pointer;
+    font-size: 14px; font-weight: 600; cursor: pointer;
   }
 }
 
@@ -45,18 +45,18 @@ ion-content { --background: #121212; }
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
-    .order-num    { color: #fff; font-size: 14px; font-weight: 700; }
-    .order-status { font-size: 12px; font-weight: 600; }
+    .order-num    { color: #fff; font-size: 16px; font-weight: 700; }
+    .order-status { font-size: 14px; font-weight: 600; }
   }
 
   .order-items {
     margin-bottom: 8px;
-    .order-item { color: #ccc; font-size: 12px; line-height: 1.8; }
+    .order-item { color: #ccc; font-size: 14px; line-height: 1.8; }
   }
 
   .order-notes {
     background: #2a2a2a; border-radius: 8px;
-    padding: 6px 10px; font-size: 11px;
+    padding: 6px 10px; font-size: 13px;
     color: #ffc107; margin-bottom: 8px;
   }
 
@@ -65,7 +65,7 @@ ion-content { --background: #121212; }
     border: 1px solid #1565c0;
     border-radius: 8px;
     padding: 8px 12px;
-    font-size: 11px;
+    font-size: 13px;
     color: #4fc3f7;
     margin-bottom: 10px;
     line-height: 1.5;
@@ -74,8 +74,8 @@ ion-content { --background: #121212; }
   .order-card-footer {
     display: flex; justify-content: space-between;
     align-items: center; margin-bottom: 14px;
-    .order-pay   { color: #888; font-size: 11px; }
-    .order-total { color: #ffc107; font-size: 15px; font-weight: 700; }
+    .order-pay   { color: #888; font-size: 13px; }
+    .order-total { color: #ffc107; font-size: 16px; font-weight: 700; }
   }
 
   .track-section {
@@ -88,7 +88,7 @@ ion-content { --background: #121212; }
       border-radius: 10px;
       padding: 12px;
       color: #2196F3;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 600;
       cursor: pointer;
     }
@@ -96,7 +96,7 @@ ion-content { --background: #121212; }
     .tracking-badge {
       text-align: center;
       color: #ffc107;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
       padding: 8px;
       background: #1a1a00;
@@ -118,7 +118,7 @@ ion-content { --background: #121212; }
         border-radius: 50%; background: #333;
         transition: background 0.3s;
       }
-      .step-label { font-size: 9px; color: #666; white-space: nowrap; }
+      .step-label { font-size: 10px; color: #666; white-space: nowrap; }
 
       &.active .step-dot  { background: #ffc107; }
       &.active .step-label { color: #ffc107; }
@@ -132,7 +132,6 @@ ion-content { --background: #121212; }
   }
 }
 
-// ✅ Mapa fuera del *ngFor
 .map-wrapper {
   margin: 0 14px 24px;
   background: #1e1e1e;
@@ -141,7 +140,7 @@ ion-content { --background: #121212; }
 
   .eta-bar {
     color: #ffc107;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     margin-bottom: 10px;
   }
@@ -164,7 +163,7 @@ ion-content { --background: #121212; }
     border-radius: 10px;
     padding: 10px;
     color: #aaa;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
   }

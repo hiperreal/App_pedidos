@@ -1,6 +1,6 @@
 .panel-head {
   background: #1a1a1a;
-  padding: 16px 20px;
+  padding: calc(env(safe-area-inset-top) + 10px) 20px 14px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -16,7 +16,7 @@
 
   h3 {
     color: #fff;
-    font-size: 22px;
+    font-size: 16px;
     font-weight: 700;
     margin: 0;
   }
@@ -45,18 +45,18 @@ ion-content {
   &:last-child { border-right: none; }
 
   .col-head {
-    padding: 16px 18px;
+    padding: 12px 10px;
     border-bottom: 2px solid #2a2a2a;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     background: #1e1e1e;
     position: sticky;
     top: 0;
     z-index: 10;
 
     .col-title {
-      font-size: 18px;
+      font-size: 13px;
       font-weight: 700;
       &.pending { color: #FF6B00; }
       &.cooking  { color: #FFC107; }
@@ -64,8 +64,8 @@ ion-content {
     }
 
     .col-badge {
-      font-size: 14px;
-      padding: 4px 14px;
+      font-size: 13px;
+      padding: 3px 10px;
       border-radius: 20px;
       font-weight: 700;
       &.badge-p { background: #3a1500; color: #FF6B00; }
@@ -76,17 +76,17 @@ ion-content {
 
   .col-body {
     flex: 1;
-    padding: 12px;
+    padding: 8px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     background: #121212;
     overflow-y: auto;
 
     .pcol-empty {
       text-align: center;
       padding: 40px 0;
-      font-size: 16px;
+      font-size: 13px;
       color: #444;
     }
   }
@@ -95,7 +95,7 @@ ion-content {
 .pcard {
   background: #1e1e1e;
   border-radius: 12px;
-  padding: 16px;
+  padding: 12px;
   border-left: 5px solid;
 
   &.pending { border-left-color: #FF6B00; }
@@ -106,70 +106,70 @@ ion-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 
     .pcard-num {
-      font-size: 26px;
+      font-size: 22px;
       font-weight: 800;
       color: #ffc107;
     }
     .pcard-time {
-      font-size: 14px;
+      font-size: 11px;
       color: #888;
     }
   }
 
   .pcard-items {
-    font-size: 16px;
+    font-size: 13px;
     color: #fff;
-    line-height: 2.2;
-    margin-bottom: 10px;
+    line-height: 2;
+    margin-bottom: 8px;
     border-top: 1px solid #2a2a2a;
-    padding-top: 10px;
+    padding-top: 8px;
     font-weight: 600;
     letter-spacing: 0.3px;
   }
 
   .pcard-note {
-    font-size: 14px;
+    font-size: 12px;
     color: #FF6B00;
     font-style: italic;
     background: #2a1500;
     border-radius: 8px;
-    padding: 8px 12px;
-    margin-bottom: 10px;
+    padding: 6px 10px;
+    margin-bottom: 8px;
     line-height: 1.5;
   }
 
   .pcard-address {
-    font-size: 13px;
+    font-size: 11px;
     color: #4fc3f7;
     background: #0a1e2e;
     border: 1px solid #1565c0;
     border-radius: 8px;
-    padding: 8px 12px;
-    margin-bottom: 10px;
+    padding: 6px 10px;
+    margin-bottom: 8px;
     line-height: 1.5;
   }
 
   .pcard-pay {
-    font-size: 15px;
+    font-size: 12px;
     color: #bbb;
-    margin-bottom: 14px;
+    margin-bottom: 10px;
     font-weight: 500;
   }
 
   .pcard-btns {
     display: flex;
-    gap: 10px;
+    gap: 6px;
 
     .advance-btn {
       flex: 1;
       background: #ffc107;
       border: none;
       border-radius: 10px;
-      padding: 12px 10px;
-      font-size: 15px;
+      padding: 10px 6px;
+      font-size: 12px;
       color: #000;
       cursor: pointer;
       font-weight: 700;
@@ -180,8 +180,8 @@ ion-content {
       background: #1a2e1a;
       border: 1px solid #4CAF50;
       border-radius: 10px;
-      padding: 12px 10px;
-      font-size: 14px;
+      padding: 10px 6px;
+      font-size: 12px;
       color: #4CAF50;
       cursor: pointer;
       display: flex;
@@ -203,8 +203,8 @@ ion-content {
       background: #2a0a0a;
       border: 1px solid #c44;
       border-radius: 10px;
-      padding: 12px 14px;
-      font-size: 14px;
+      padding: 10px 12px;
+      font-size: 13px;
       color: #e44;
       cursor: pointer;
       font-weight: 600;

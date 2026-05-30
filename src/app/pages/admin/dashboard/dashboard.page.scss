@@ -1,13 +1,13 @@
 .admin-header {
   background: #1e1e1e;
-  padding: 14px 16px;
+  padding: calc(env(safe-area-inset-top) + 10px) 16px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 
   .header-left {
-    h3 { color: #fff; font-size: 16px; font-weight: 700; margin: 0; }
-    .header-sub { color: #888; font-size: 11px; margin: 0; }
+    h3 { color: #fff; font-size: 18px; font-weight: 700; margin: 0; }
+    .header-sub { color: #888; font-size: 12px; margin: 0; }
   }
 
   .logout-btn {
@@ -16,7 +16,7 @@
     border-radius: 8px;
     padding: 6px 14px;
     color: #fff;
-    font-size: 12px;
+    font-size: 13px;
     cursor: pointer;
   }
 }
@@ -37,8 +37,8 @@ ion-content { --background: #121212; }
     cursor: pointer;
 
     .metric-ico { font-size: 24px; margin-bottom: 6px; }
-    .metric-val { color: #fff; font-size: 18px; font-weight: 700; }
-    .metric-lbl { color: #888; font-size: 10px; margin-top: 4px; }
+    .metric-val { color: #fff; font-size: 16px; font-weight: 700; }
+    .metric-lbl { color: #888; font-size: 11px; margin-top: 4px; }
 
     &.revenue { border-top: 3px solid #4CAF50; }
     &.orders  { border-top: 3px solid #2196F3; }
@@ -52,7 +52,7 @@ ion-content { --background: #121212; }
 .section-title {
   padding: 10px 16px 6px;
   color: #fff;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
 }
 
@@ -70,10 +70,10 @@ ion-content { --background: #121212; }
     border-bottom: 1px solid #2a2a2a;
     &:last-child { border-bottom: none; }
 
-    .product-rank  { color: #ffc107; font-size: 12px; font-weight: 700; width: 24px; }
+    .product-rank  { color: #ffc107; font-size: 13px; font-weight: 700; width: 24px; }
     .product-emoji { font-size: 20px; }
-    .product-name  { flex: 1; color: #fff; font-size: 12px; font-weight: 500; }
-    .product-count { color: #888; font-size: 11px; }
+    .product-name  { flex: 1; color: #fff; font-size: 14px; font-weight: 500; }
+    .product-count { color: #888; font-size: 13px; }
   }
 }
 
@@ -95,9 +95,9 @@ ion-content { --background: #121212; }
       display: flex;
       flex-direction: column;
       gap: 2px;
-      .order-num         { color: #fff; font-size: 13px; font-weight: 700; }
-      .order-items-count { color: #888; font-size: 11px; }
-      .order-address     { color: #4fc3f7; font-size: 10px; }
+      .order-num         { color: #fff; font-size: 14px; font-weight: 700; }
+      .order-items-count { color: #888; font-size: 12px; }
+      .order-address     { color: #4fc3f7; font-size: 11px; }
     }
 
     .order-row-right {
@@ -105,8 +105,8 @@ ion-content { --background: #121212; }
       flex-direction: column;
       align-items: flex-end;
       gap: 2px;
-      .order-pay   { color: #888; font-size: 11px; }
-      .order-total { color: #ffc107; font-size: 14px; font-weight: 700; }
+      .order-pay   { color: #888; font-size: 12px; }
+      .order-total { color: #ffc107; font-size: 15px; font-weight: 700; }
     }
   }
 }
