@@ -1,4 +1,4 @@
-<ion-content>
+ <ion-content>
   <div class="register-container">
 
     <div class="register-header">
@@ -28,40 +28,6 @@
       <div class="input-group">
         <label>Confirmar contraseña</label>
         <input type="password" placeholder="Repite tu contraseña" [(ngModel)]="confirmPassword" />
-      </div>
-
-      <div class="input-group">
-        <label>Tipo de cuenta</label>
-        <div class="role-selector">
-          <div
-            class="role-opt"
-            [class.active]="role === 'client'"
-            (click)="role = 'client'">
-            <span class="role-ico">👤</span>
-            <span>Cliente</span>
-          </div>
-          <div
-            class="role-opt"
-            [class.active]="role === 'restaurant'"
-            (click)="role = 'restaurant'">
-            <span class="role-ico">🍽</span>
-            <span>Restaurante</span>
-          </div>
-          <div
-            class="role-opt"
-            [class.active]="role === 'delivery'"
-            (click)="role = 'delivery'">
-            <span class="role-ico">🛵</span>
-            <span>Repartidor</span>
-          </div>
-          <div
-            class="role-opt"
-            [class.active]="role === 'admin'"
-            (click)="role = 'admin'">
-            <span class="role-ico">🖥</span>
-            <span>Admin</span>
-          </div>
-        </div>
       </div>
 
       <button class="btn-primary" (click)="register()">

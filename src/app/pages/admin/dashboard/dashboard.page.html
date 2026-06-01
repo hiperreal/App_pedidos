@@ -2,7 +2,7 @@
   <div class="admin-header">
     <div class="header-left">
       <h3>🖥 Panel Admin</h3>
-      <p class="header-sub">BurgerHub Dashboard</p>
+      <p class="header-sub">La Central del Sabor</p>
     </div>
     <button class="logout-btn" (click)="logout()">Salir</button>
   </div>
@@ -18,28 +18,68 @@
     </div>
     <div class="metric-card orders">
       <div class="metric-ico">🧾</div>
-      <div class="metric-val">₡{{ totalOrders }}</div>
+      <div class="metric-val">{{ totalOrders }}</div>
       <div class="metric-lbl">Pedidos totales</div>
     </div>
     <div class="metric-card pending">
       <div class="metric-ico">⏳</div>
-      <div class="metric-val">₡{{ pendingOrders }}</div>
+      <div class="metric-val">{{ pendingOrders }}</div>
       <div class="metric-lbl">Pendientes</div>
     </div>
     <div class="metric-card cooking">
       <div class="metric-ico">👨‍🍳</div>
-      <div class="metric-val">₡{{ cookingOrders }}</div>
+      <div class="metric-val">{{ cookingOrders }}</div>
       <div class="metric-lbl">En cocina</div>
     </div>
     <div class="metric-card sent">
       <div class="metric-ico">🛵</div>
-      <div class="metric-val">₡{{ sentOrders }}</div>
+      <div class="metric-val">{{ sentOrders }}</div>
       <div class="metric-lbl">Enviados</div>
     </div>
     <div class="metric-card kds" (click)="goToKds()">
       <div class="metric-ico">📺</div>
       <div class="metric-val">KDS</div>
       <div class="metric-lbl">Ver cocina</div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN TRABAJADORES -->
+  <div class="section-title">👥 Gestión de trabajadores</div>
+
+  <div class="worker-section">
+    <button class="btn-add-worker" (click)="showWorkerForm = !showWorkerForm">
+      {{ showWorkerForm ? '✕ Cancelar' : '+ Agregar trabajador' }}
+    </button>
+
+    <div class="worker-form" *ngIf="showWorkerForm">
+      <input class="worker-input" type="text"
+        placeholder="Nombre completo"
+        [(ngModel)]="workerName" />
+      <input class="worker-input" type="email"
+        placeholder="Correo electrónico"
+        [(ngModel)]="workerEmail" />
+      <input class="worker-input" type="password"
+        placeholder="Contraseña (mínimo 6 caracteres)"
+        [(ngModel)]="workerPassword" />
+
+      <div class="role-row">
+        <button class="role-btn"
+          [class.sel]="workerRole === 'delivery'"
+          (click)="workerRole = 'delivery'">
+          🛵 Repartidor
+        </button>
+        <button class="role-btn"
+          [class.sel]="workerRole === 'restaurant'"
+          (click)="workerRole = 'restaurant'">
+          🍽 Restaurante
+        </button>
+      </div>
+
+      <button class="btn-create"
+        (click)="createWorker()"
+        [disabled]="creatingWorker">
+        {{ creatingWorker ? 'Creando...' : 'Crear cuenta' }}
+      </button>
     </div>
   </div>
 
@@ -53,7 +93,6 @@
       <div class="product-count">{{ p.count }} pedidos</div>
     </div>
   </div>
-
   <div class="no-data" *ngIf="!topProducts.length">
     <p>Aún no hay pedidos registrados</p>
   </div>
@@ -69,12 +108,10 @@
       </div>
       <div class="order-row-right">
         <span class="order-pay">{{ order.payMethod }}</span>
-        <span class="order-total">
-          ₡{{ order.total.toFixed(2) }}</span>
+        <span class="order-total">₡{{ order.total.toFixed(2) }}</span>
       </div>
     </div>
   </div>
-
   <div class="no-data" *ngIf="!allOrders.length">
     <p>Sin pedidos aún</p>
   </div>

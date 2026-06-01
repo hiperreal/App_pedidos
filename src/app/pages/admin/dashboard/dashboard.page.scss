@@ -116,3 +116,74 @@ ion-content { --background: #121212; }
   padding: 20px;
   p { color: #555; font-size: 13px; }
 }
+.worker-section {
+  margin: 0 14px 20px;
+
+  .btn-add-worker {
+    width: 100%;
+    background: #1a2e3a;
+    border: 1px solid #2196F3;
+    border-radius: 10px;
+    padding: 12px;
+    color: #2196F3;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .worker-form {
+    background: #1e1e1e;
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .worker-input {
+      background: #2a2a2a;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 12px;
+      color: #fff;
+      font-size: 14px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .role-row {
+      display: flex;
+      gap: 10px;
+
+      .role-btn {
+        flex: 1;
+        background: #2a2a2a;
+        border: 1px solid #333;
+        border-radius: 10px;
+        padding: 12px;
+        color: #888;
+        font-size: 13px;
+        cursor: pointer;
+
+        &.sel {
+          border-color: #ffc107;
+          color: #ffc107;
+          background: #2a2500;
+        }
+      }
+    }
+
+    .btn-create {
+      background: #ffc107;
+      border: none;
+      border-radius: 10px;
+      padding: 13px;
+      color: #000;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+
+      &:disabled { opacity: 0.6; }
+    }
+  }
+}

@@ -3,6 +3,10 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CartService } from '../../../core/services/cart';
 import { Order } from '../../../core/models/menu.model';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { ToastController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -17,12 +21,21 @@ export class DashboardPage implements OnInit, OnDestroy {
   cookingOrders: number = 0;
   sentOrders: number = 0;
   allOrders: Order[] = [];
-  private sub!: Subscription;
   topProducts: { name: string; count: number; emoji: string }[] = [];
+  private sub!: Subscription;
+
+  // Formulario de nuevo trabajador
+  showWorkerForm: boolean = false;
+  workerName: string = '';
+  workerEmail: string = '';
+  workerPassword: string = '';
+  workerRole: string = 'delivery';
+  creatingWorker: boolean = false;
 
   constructor(
     private router: Router,
-    private cartService: CartService
+    private cartService: CartService,
+    private toastCtrl: ToastController
   ) {}
 
   ngOnInit(): void {
@@ -60,11 +73,50 @@ export class DashboardPage implements OnInit, OnDestroy {
       .slice(0, 5);
   }
 
-  goToKds(): void {
-    this.router.navigate(['/restaurant/kds']);
+  async createWorker(): Promise<void> {
+    if (!this.workerName || !this.workerEmail || !this.workerPassword) {
+      this.showToast('Completa todos los campos', 'danger');
+      return;
+    }
+    if (this.workerPassword.length < 6) {
+      this.showToast('La contraseña debe tener al menos 6 caracteres', 'danger');
+      return;
+    }
+    this.creatingWorker = true;
+    try {
+      const auth = getAuth();
+      const db   = getFirestore();
+      const cred = await createUserWithEmailAndPassword(
+        auth, this.workerEmail, this.workerPassword
+      );
+      await setDoc(doc(db, 'users', cred.user.uid), {
+        uid:   cred.user.uid,
+        name:  this.workerName,
+        email: this.workerEmail,
+        role:  this.workerRole
+      });
+      this.showToast('✅ Trabajador creado exitosamente', 'success');
+      this.workerName = '';
+      this.workerEmail = '';
+      this.workerPassword = '';
+      this.workerRole = 'delivery';
+      this.showWorkerForm = false;
+    } catch (e: any) {
+      const msg = e.code === 'auth/email-already-in-use'
+        ? 'Ese correo ya está registrado'
+        : 'Error al crear el trabajador';
+      this.showToast(msg, 'danger');
+    }
+    this.creatingWorker = false;
   }
 
-  logout(): void {
-    this.router.navigate(['/login']);
+  async showToast(msg: string, color: string): Promise<void> {
+    const t = await this.toastCtrl.create({
+      message: msg, duration: 2500, color, position: 'top'
+    });
+    await t.present();
   }
+
+  goToKds(): void { this.router.navigate(['/restaurant/kds']); }
+  logout(): void  { this.router.navigate(['/login']); }
 }
