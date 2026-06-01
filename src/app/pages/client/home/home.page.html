@@ -10,7 +10,10 @@
     <p class="sub">¿Qué se te antoja hoy?</p>
     <div class="search-box">
       <ion-icon name="search-outline"></ion-icon>
-      <input type="text" placeholder="Buscar platillos..." class="inner-input">
+      <input type="text" placeholder="Buscar platillos..."
+        class="inner-input"
+        [(ngModel)]="searchQuery"
+        (input)="onSearch($event)">
     </div>
   </div>
 
